@@ -1,0 +1,15 @@
+Metric,Value,Status
+Total Test Cases,23,✓
+Unit Tests,17,✓ 17/17 passing
+E2E Tests,6,✓ 6/6 passing
+Test Files,4,✓
+Categories,9,✓
+Coverage Categories,"Upload & Compare, Data Entry, CSV Import, Validation, Generator, Date Handling, CSV Parsing, Diagnostics, Comparison, Military Service, Record Assignment, Field Mapping, UI Display, Limits, UI Structure, CSV Template, Security",✓
+Overall Pass Rate,100%,✓ PASSING
+Execution Time (Unit Tests),~150ms,✓
+Execution Time (E2E Tests),~2.6s,✓
+Total Execution Time,~2.8s,✓
+Last Run,2026-04-18,✓
+HTML Report,playwright-report/index.html,✓ Available
+Test Documentation,test/README.md + e2e/README.md,✓ Complete
+Code Documentation,README.md + CLAUDE.md,✓ Complete

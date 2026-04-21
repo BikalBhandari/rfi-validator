@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; worker-src 'none'; manifest-src 'none'; media-src 'none'"
+  />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+  <title>RFI Validator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="sidebar-brand-mark">R</span>
+        <span>RFI Validator</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Primary">
+        <a id="nav-dashboard" class="topbar-link sidebar-link active" href="#" data-view="dashboard" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+        <a id="nav-rfi-inputs" class="topbar-link sidebar-link" href="#" data-view="rfi-inputs">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4h-2V6H5v12h14v-4h2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm9 2 6 4-6 4v-3H7v-2h5V8Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>RFI Inputs</span>
+        </a>
+        <a id="nav-salesforce-records" class="topbar-link sidebar-link" href="#" data-view="salesforce-records">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3c-4.97 0-9 1.57-9 3.5S7.03 10 12 10s9-1.57 9-3.5S16.97 3 12 3Zm-9 7.5V13c0 1.93 4.03 3.5 9 3.5s9-1.57 9-3.5v-2.5c-1.84 1.43-5.35 2.25-9 2.25S4.84 11.93 3 10.5Zm0 6V18.5C3 20.43 7.03 22 12 22s9-1.57 9-3.5v-2c-1.84 1.43-5.35 2.25-9 2.25S4.84 17.93 3 16.5Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Salesforce Records</span>
+        </a>
+        <a id="nav-test-data-generator" class="topbar-link sidebar-link" href="#" data-view="test-data-generator">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 2h2v6H6V2Zm10 0h2v9h-2V2ZM11 2h2v14h-2V2ZM4 9h6v2H8v11H6V11H4V9Zm7 8h6v2h-2v3h-2v-3h-2v-2Zm5-5h4v2h-1v8h-2v-8h-1v-2Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Test Data Generator</span>
+        </a>
+        <a id="nav-history" class="topbar-link sidebar-link" href="#" data-view="history">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M11 7h2v6l5 3-1 1.73-6-3.6V7ZM12 2a10 10 0 1 1-7.07 2.93L2 8h7V1L6.34 3.66A12 12 0 1 0 12 0v2Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>History</span>
+        </a>
+        <a id="nav-profile" class="topbar-link sidebar-link" href="#" data-view="profile">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="appearance-button" class="sidebar-appearance-button" type="button" aria-expanded="false" aria-controls="appearance-panel">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 0 1 11.21 3c0-.34.02-.67.05-1A1 1 0 0 0 10 1a11 11 0 1 0 13 13 1 1 0 0 0-1.26-1.21c-.24.04-.49.06-.74.06Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Appearance</span>
+        </button>
+        <div id="appearance-panel" class="appearance-panel" hidden>
+          <div class="appearance-panel-header">
+            <strong>Appearance</strong>
+            <span>Choose the workspace theme.</span>
+          </div>
+          <div class="appearance-options" role="radiogroup" aria-label="Theme options">
+            <button class="appearance-option active" type="button" data-theme-option="light" role="radio" aria-checked="true">
+              <span class="appearance-swatch swatch-light" aria-hidden="true"></span>
+              <span class="appearance-option-copy">
+                <span>Light</span>
+                <small>Clean and neutral</small>
+              </span>
+            </button>
+            <button class="appearance-option" type="button" data-theme-option="dark" role="radio" aria-checked="false">
+              <span class="appearance-swatch swatch-dark" aria-hidden="true"></span>
+              <span class="appearance-option-copy">
+                <span>Dark</span>
+                <small>Low-light contrast</small>
+              </span>
+            </button>
+            <button class="appearance-option" type="button" data-theme-option="retro" role="radio" aria-checked="false">
+              <span class="appearance-swatch swatch-retro" aria-hidden="true"></span>
+              <span class="appearance-option-copy">
+                <span>Retro</span>
+                <small>Warm paper palette</small>
+              </span>
+            </button>
+            <button class="appearance-option" type="button" data-theme-option="vintage" role="radio" aria-checked="false">
+              <span class="appearance-swatch swatch-vintage" aria-hidden="true"></span>
+              <span class="appearance-option-copy">
+                <span>Vintage</span>
+                <small>Flat editorial gray</small>
+              </span>
+            </button>
+            <button class="appearance-option" type="button" data-theme-option="asu" role="radio" aria-checked="false">
+              <span class="appearance-swatch swatch-asu" aria-hidden="true"></span>
+              <span class="appearance-option-copy">
+                <span>ASU</span>
+                <small>Maroon and gold</small>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="topbar-project">
+        </div>
+
+        <div class="topbar-actions" aria-label="Utility actions">
+          <div class="topbar-notifications">
+            <button
+              id="notifications-button"
+              class="topbar-icon-button"
+              type="button"
+              aria-label="Notifications"
+              aria-expanded="false"
+              aria-controls="notifications-panel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3a4 4 0 0 1 4 4v1.2c0 .84.3 1.66.84 2.3l1.03 1.24c.84 1.01 1.3 2.29 1.3 3.6V17H4.83v-1.66c0-1.31.46-2.59 1.3-3.6l1.03-1.24A3.6 3.6 0 0 0 8 8.2V7a4 4 0 0 1 4-4Zm0 18a2.5 2.5 0 0 1-2.45-2h4.9A2.5 2.5 0 0 1 12 21Z" fill="currentColor" />
+              </svg>
+              <span id="notifications-badge" class="topbar-notification-badge" hidden>0</span>
+            </button>
+            <div id="notifications-panel" class="notifications-panel" hidden>
+              <div class="notifications-panel-header">
+                <strong>Recent activity</strong>
+                <span>Latest comparison runs in this session.</span>
+              </div>
+              <div id="notifications-list" class="notifications-list" role="list">
+                <p class="notifications-empty">Recent comparison activity will appear here.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="topbar-divider" aria-hidden="true"></div>
+
+          <div class="topbar-user">
+            <div class="topbar-user-copy">
+              <div class="topbar-user-name">Bikal Bhandari</div>
+              <div class="topbar-user-role">Admin</div>
+            </div>
+            <button class="topbar-avatar-button" type="button" aria-label="User profile">
+              <span class="topbar-avatar">BB</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-shell">
+        <section id="dashboard-view" class="app-view dashboard-view">
+          <section class="page-intro">
+            <h1>Dashboard</h1>
+            <p>Upload Salesforce data, import RFI bulk data, review export status, and run comparison from one workflow page.</p>
+          </section>
+
+          <section class="dashboard-stack">
+            <div class="dashboard-grid dashboard-grid-top">
+              <section class="card export-upload-card">
+                <div class="card-header-row">
+                  <p class="section-label">Salesforce Export File</p>
+                  <span class="card-header-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M18 17v2H6v-2H4v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2h-2Zm-6-1 5-5h-3V4h-4v7H7l5 5Z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </div>
+
+                <input class="file-input-hidden" type="file" id="file-input" accept=".csv,text/csv" />
+                <label class="upload-dropzone" for="file-input">
+                  <span class="upload-dropzone-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm1 7V5.5L18.5 9H16a1 1 0 0 1-1-1ZM8 14.5l2.6-2.6 1.8 1.8 2.6-2.6L18 14.1V17H8v-2.5Zm4.75-3.25 1.5 1.5V10h2l-4-4-4 4h2v4.75l1.5-1.5Z" fill="currentColor" />
+                    </svg>
+                  </span>
+                  <span class="upload-dropzone-copy">Drag and drop your export here</span>
+                  <span class="upload-dropzone-subcopy">Supports CSV only (Max 500 rows)</span>
+                  <span class="upload-dropzone-button">Choose File</span>
+                </label>
+                <div id="status" class="status export-status"></div>
+              </section>
+
+              <section class="card dashboard-upload-card">
+                <div class="rfi-import-panel">
+                  <div class="rfi-import-header">
+                    <div class="rfi-import-copy">
+                      <p class="section-label">RFI Bulk Data</p>
+                      <h3>Upload RFI CSV</h3>
+                      <p class="supporting-text">Append RFI rows from a CSV file. Imported rows remain editable from the RFI Inputs page.</p>
+                    </div>
+                    <span class="rfi-import-tag">RFI</span>
+                  </div>
+
+                  <div class="rfi-import-grid dashboard-rfi-import-grid">
+                    <div class="rfi-import-field">
+                      <label class="file-input-label" for="rfi-csv-input">Upload RFI CSV</label>
+                      <input class="dashboard-rfi-input" type="file" id="rfi-csv-input" accept=".csv,text/csv" />
+                      <p class="supporting-text">Use a CSV with headers that map to the RFI fields shown in the manual entry table. Max 500 rows.</p>
+                      <div class="rfi-template-download">
+                        <span class="rfi-template-label">First time here?</span>
+                        <a
+                          class="rfi-template-link"
+                          href="sample_rfi-entered_timestamp.csv"
+                          download="sample_rfi-entered_timestamp.csv"
+                        >
+                          <span class="download-action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                              <path d="M12 3a1 1 0 0 1 1 1v8.59l2.3-2.29a1 1 0 1 1 1.4 1.41l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.41L11 12.59V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z" fill="currentColor" />
+                            </svg>
+                          </span>
+                          Download Sample CSV
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="rfi-import-status" class="status rfi-import-status">You can import CSV rows here and refine them in RFI Inputs.</p>
+                </div>
+              </section>
+            </div>
+
+            <div class="dashboard-grid dashboard-grid-middle">
+              <aside class="card export-status-card" aria-label="Salesforce export status">
+                <div class="status-card-header">
+                  <h2 class="section-label">Export Status</h2>
+                  <div class="status-card-actions">
+                    <button id="reset-export-button" class="reset-link-button" type="button">Reset export</button>
+                    <button id="reset-all-button" class="reset-link-button reset-all-button" type="button">Reset all data</button>
+                  </div>
+                </div>
+
+                <div class="status-metric-grid">
+                  <div class="status-metric status-metric-selected-file">
+                    <span class="preview-metric-label">Selected File</span>
+                    <strong id="preview-file-name" class="status-metric-value truncated-metric-value">No file chosen</strong>
+                  </div>
+                  <div class="status-metric status-metric-file-type">
+                    <span class="preview-metric-label">File Type</span>
+                    <strong id="preview-file-type" class="status-metric-value">-</strong>
+                  </div>
+                  <div class="status-metric status-metric-ready-rfis">
+                    <span class="preview-metric-label">Ready RFI Entries</span>
+                    <strong id="preview-rfi-count" class="status-metric-value">0</strong>
+                  </div>
+                  <div class="status-metric status-metric-missing-fields">
+                    <span class="preview-metric-label">Missing Fields</span>
+                    <strong id="preview-missing-fields" class="status-metric-value">7</strong>
+                  </div>
+                  <div class="status-metric status-metric-table-rows">
+                    <span class="preview-metric-label">Table Rows</span>
+                    <strong id="preview-row-count" class="status-metric-value">0 / 0</strong>
+                  </div>
+                  <div class="status-metric status-metric-recognized-fields">
+                    <span class="preview-metric-label">Recognized Fields</span>
+                    <strong id="preview-recognized-fields" class="status-metric-value">0 / 7</strong>
+                  </div>
+                  <div class="status-metric status-metric-imported-rows">
+                    <span class="preview-metric-label">Imported Rows</span>
+                    <strong id="preview-record-count" class="status-metric-value">0</strong>
+                  </div>
+                  <div class="status-metric status-metric-status">
+                    <span class="preview-metric-label">Status</span>
+                    <strong id="preview-ready-state" class="validation-badge neutral-badge">Inactive</strong>
+                  </div>
+                </div>
+
+                <p id="preview-diagnostics-note" class="preview-diagnostics-note">Upload a Salesforce export to review imported records before comparing.</p>
+              </aside>
+
+              <section class="card comparison-action-card">
+                <div class="validation-action-bar">
+                  <div class="validation-action-copy">
+                    <h3>Run comparison</h3>
+                    <p id="workflow-summary" class="supporting-text">Upload a Salesforce export and import RFI bulk data or enter rows in RFI Inputs to enable comparison.</p>
+                  </div>
+                  <div class="validation-action-buttons">
+                    <button id="compare-button" class="primary-button validation-primary-button" disabled>Compare Results</button>
+                    <button id="download-button" class="secondary-button validation-secondary-button" disabled>Download Results</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section class="results-section">
+              <section class="card results-card" id="results-card" tabindex="-1">
+                <div id="results-container"></div>
+              </section>
+            </section>
+          </section>
+        </section>
+
+        <section id="rfi-inputs-view" class="app-view rfi-inputs-view" hidden>
+          <section class="page-intro">
+            <h1>RFI Inputs</h1>
+            <p>Build and manage the manual RFI submission table used in comparison.</p>
+          </section>
+
+          <section class="card submission-card">
+            <div class="submission-card-header">
+              <div>
+                <p class="section-label">RFI Inputs</p>
+                <h2>Manual RFI Submission Data</h2>
+                <p class="supporting-text">Create, review, and edit RFI submissions in a single table.</p>
+              </div>
+            </div>
+
+            <div class="rfi-controls-row">
+              <div class="manual-rfi-actions">
+                <button id="add-rfi-button" class="primary-button action-button" type="button">Add New Record</button>
+                <button id="clear-rfi-table-button" class="danger-button action-button" type="button">Delete All</button>
+              </div>
+            </div>
+
+            <div id="manual-rfi-panel" class="rfi-switcher-panel active">
+              <div class="table-shell submission-table-shell">
+                <table class="submission-table">
+                  <colgroup>
+                    <col class="submission-col-number" />
+                    <col class="submission-col-date" />
+                    <col class="submission-col-name" />
+                    <col class="submission-col-name" />
+                    <col class="submission-col-email" />
+                    <col class="submission-col-phone" />
+                    <col class="submission-col-status" />
+                    <col class="submission-col-url" />
+                    <col class="submission-col-action" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>RFI</th>
+                      <th>Created Date</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Email</th>
+                      <th>Phone Number</th>
+                      <th>Military Service</th>
+                      <th>ASUO Origin URL</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rfi-submissions"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section id="test-data-generator-view" class="app-view generator-view" hidden>
+          <section class="page-intro">
+            <h1>Test Data Generator</h1>
+            <p>Configure and generate synthetic data with custom logic.</p>
+          </section>
+
+          <section class="card generator-card">
+            <div class="generator-card-header">
+              <div class="generator-card-copy">
+                <span class="generator-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 2h2v6H6V2Zm10 0h2v9h-2V2ZM11 2h2v14h-2V2ZM4 9h6v2H8v11H6V11H4V9Zm7 8h6v2h-2v3h-2v-3h-2v-2Zm5-5h4v2h-1v8h-2v-8h-1v-2Z" fill="currentColor" />
+                  </svg>
+                </span>
+                <h2>Configuration</h2>
+              </div>
+              <span class="generator-badge">Draft config</span>
+            </div>
+
+            <div class="generator-form-grid">
+              <label class="generator-field generator-field-full">
+                <span class="generator-field-label">URL</span>
+                <input id="generator-url" type="url" placeholder="e.g. https://asuonline.asu.edu" />
+              </label>
+              <label class="generator-field">
+                <span class="generator-field-label">Identifier</span>
+                <input id="generator-identifier" type="text" placeholder="e.g. ID_9921" />
+              </label>
+              <label class="generator-field">
+                <span class="generator-field-label">Browser</span>
+                <select id="generator-browser">
+                  <option value="">Select browser</option>
+                  <option value="Chrome">Chrome</option>
+                  <option value="Safari">Safari</option>
+                  <option value="Firefox">Firefox</option>
+                  <option value="Edge">Edge</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label class="generator-field">
+                <span class="generator-field-label">Device</span>
+                <select id="generator-device">
+                  <option value="">Select device</option>
+                  <option value="iOS">iOS</option>
+                  <option value="MacOS">MacOS</option>
+                  <option value="Windows">Windows</option>
+                  <option value="Android">Android</option>
+                  <option value="iPadOS">iPadOS</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label class="generator-field">
+                <span class="generator-field-label">Identifier Data</span>
+                <input id="generator-identifier-data" type="text" readonly aria-readonly="true" value="Calculated from identifier, browser, and device" />
+              </label>
+              <label class="generator-field">
+                <span class="generator-field-label">Generated Timestamp</span>
+                <input id="generator-timestamp" type="text" readonly aria-readonly="true" value="Generated on click (UTC)" />
+              </label>
+            </div>
+            <p class="generator-meta-note">UTC timestamp is generated automatically when you click <strong>Generate Data</strong>.</p>
+
+            <section class="generator-section">
+              <h3>Field selection</h3>
+              <div class="generator-options-grid">
+                <label class="generator-option-card selected" data-generator-card="first-name">
+                  <span class="generator-option-header">
+                    <input id="generator-first-name" class="generator-toggle-input" type="checkbox" checked />
+                    <span class="generator-option-copy">
+                      <strong>First Name</strong>
+                      <span>Editable value used in generated output</span>
+                    </span>
+                  </span>
+                  <input id="generator-first-name-value" class="generator-inline-input" type="text" value="Embtest" />
+                </label>
+
+                <label class="generator-option-card selected" data-generator-card="last-name">
+                  <span class="generator-option-header">
+                    <input id="generator-last-name" class="generator-toggle-input" type="checkbox" checked />
+                    <span class="generator-option-copy">
+                      <strong>Last Name</strong>
+                      <span>Editable value used in generated output</span>
+                    </span>
+                  </span>
+                  <input id="generator-last-name-value" class="generator-inline-input" type="text" value="Embtest" />
+                </label>
+
+                <fieldset class="generator-option-card generator-option-card-wide selected" data-generator-card="phone">
+                  <legend class="sr-only">Phone number generation</legend>
+                  <label class="generator-option-header generator-option-header-block" for="generator-phone-number">
+                    <input id="generator-phone-number" class="generator-toggle-input" type="checkbox" checked />
+                    <span class="generator-option-copy">
+                      <strong>Phone Number</strong>
+                    </span>
+                  </label>
+                  <div class="generator-radio-row">
+                    <label class="generator-radio-option">
+                      <input type="radio" name="generator-phone-format" value="us" checked />
+                      <span>US</span>
+                    </label>
+                    <label class="generator-radio-option">
+                      <input type="radio" name="generator-phone-format" value="india" />
+                      <span>India</span>
+                    </label>
+                    <label class="generator-radio-option">
+                      <input type="radio" name="generator-phone-format" value="international" />
+                      <span>International</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="generator-option-card generator-option-card-wide generator-email-card selected" data-generator-card="email">
+                  <legend class="sr-only">Email generation</legend>
+                  <label class="generator-option-header generator-option-header-block" for="generator-email">
+                    <input id="generator-email" class="generator-toggle-input" type="checkbox" checked />
+                    <span class="generator-option-copy">
+                      <strong>Email</strong>
+                    </span>
+                  </label>
+                  <div id="generator-email-preview" class="generator-formula-box">embtest.{identifier}.{batchid}.r{rowNumber}@asu.edu</div>
+                  <p class="generator-logic-note">Logic: Uses the identifier, batch ID, and row number.</p>
+                </fieldset>
+              </div>
+            </section>
+
+            <div class="generator-actions">
+              <div class="generator-batch-size-control">
+                <label class="generator-batch-size-label">Batch size:</label>
+                <div class="generator-batch-group">
+                  <button id="generator-batch-minus-button" class="secondary-button generator-batch-button" type="button" title="Decrease batch size by 1">
+                    <span class="generator-batch-icon" aria-hidden="true">−</span>
+                  </button>
+                  <span id="generator-batch-count-display" class="generator-batch-count">1</span>
+                  <button id="generator-batch-plus-button" class="secondary-button generator-batch-button" type="button" title="Increase batch size by 1">
+                    <span class="generator-batch-icon" aria-hidden="true">+</span>
+                  </button>
+                </div>
+              </div>
+              <button id="generator-generate-button" class="primary-button generator-primary-button" type="button">
+                <span class="generator-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="m12 3 1.9 4.1L18 9l-4.1 1.9L12 15l-1.9-4.1L6 9l4.1-1.9L12 3Zm7 10 .95 2.05L22 16l-2.05.95L19 19l-.95-2.05L16 16l2.05-.95L19 13ZM5 14l1.35 2.65L9 18l-2.65 1.35L5 22l-1.35-2.65L1 18l2.65-1.35L5 14Z" fill="currentColor" />
+                  </svg>
+                </span>
+                Generate Data
+              </button>
+              <button id="generator-download-button" class="secondary-button generator-secondary-button" type="button" disabled>
+                <span class="generator-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M11 3h2v8.17l2.59-2.58L17 10l-5 5-5-5 1.41-1.41L11 11.17V3Zm-6 14h14v2H5v-2Z" fill="currentColor" />
+                  </svg>
+                </span>
+                Download Last Result
+              </button>
+              <button id="generator-inject-button" class="secondary-button generator-secondary-button" type="button" disabled>
+                <span class="generator-action-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4h-2V6H5v12h14v-4h2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm9 2 6 4-6 4v-3H7v-2h5V8Z" fill="currentColor" />
+                  </svg>
+                </span>
+                Inject to RFI
+              </button>
+            </div>
+
+            <p id="generator-status" class="status generator-status" aria-live="polite">Configure fields and generate a synthetic record.</p>
+
+            <section id="generator-results-panel" class="generator-results-panel" hidden>
+              <div class="generator-results-header">
+                <h3>Generated Data</h3>
+                <p id="generator-results-description">The generated rows are shown below.</p>
+              </div>
+              <div class="table-shell generator-results-shell">
+                <table class="generator-results-table">
+                  <thead>
+                    <tr>
+                      <th>URL</th>
+                      <th>Identifier Data</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Phone Country</th>
+                      <th>Phone Number</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody id="generator-results-body"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+        </section>
+
+        <section id="history-view" class="app-view history-view" hidden>
+          <section class="page-intro">
+            <h1>History</h1>
+            <p>Review validation runs from the current session, inspect summary metrics, and reopen prior comparison results.</p>
+          </section>
+
+          <section class="card history-card">
+            <div class="history-card-header">
+              <div>
+                <p class="section-label">Run History</p>
+                <h2>Validation History</h2>
+                <p class="supporting-text">Default columns track each comparison run and expose quick actions for review.</p>
+              </div>
+            </div>
+            <div class="table-shell history-table-shell">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Run date</th>
+                    <th>Export file</th>
+                    <th>RFI count</th>
+                    <th>Imported rows</th>
+                    <th>Recognized fields</th>
+                    <th>Match summary</th>
+                    <th>Status</th>
+                    <th>User</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="history-entries"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section id="salesforce-records-view" class="app-view salesforce-records-view" hidden>
+          <section class="page-intro">
+            <h1>Salesforce Records</h1>
+            <p>Inspect the imported Salesforce export, search across detected columns, and review the full record grid.</p>
+          </section>
+
+          <section class="card records-view-card">
+            <div class="records-view-header">
+              <div>
+                <p class="section-label">Raw Data</p>
+                <h2>Imported Salesforce Records</h2>
+                <p class="supporting-text">This view mirrors the latest uploaded export and keeps the raw rows available in a dedicated workspace.</p>
+              </div>
+            </div>
+            <div id="salesforce-records-container" class="preview-body-container"></div>
+          </section>
+        </section>
+
+        <section id="profile-view" class="app-view profile-view" hidden>
+          <section class="page-intro">
+            <h1>Profile</h1>
+            <p>Manage the identity details displayed in the top bar and across the workspace.</p>
+          </section>
+
+          <section class="card profile-card">
+            <div class="submission-card-header">
+              <div>
+                <p class="section-label">User Profile</p>
+                <h2>Display Identity</h2>
+                <p class="supporting-text">Changes here update the topbar user name, role, and avatar initials immediately.</p>
+              </div>
+            </div>
+
+            <div class="profile-layout">
+              <div class="profile-form-grid">
+                <label class="profile-field">
+                  <span class="generator-field-label">Full Name</span>
+                  <input id="profile-name" type="text" placeholder="e.g. Bikal Bhandari" />
+                </label>
+                <label class="profile-field">
+                  <span class="generator-field-label">Role</span>
+                  <input id="profile-role" type="text" placeholder="e.g. Admin" />
+                </label>
+                <label class="profile-field" id="profile-avatar-field">
+                  <span class="generator-field-label">Avatar (2 chars)</span>
+                  <input id="profile-avatar" type="text" placeholder="e.g. BB" />
+                </label>
+                <label class="profile-field">
+                  <span class="generator-field-label">Test Data Generator Identifier</span>
+                  <input id="profile-identifier" type="text" placeholder="e.g. ID_9921" />
+                  <span class="profile-helper">Used as the default identifier in the Test Data Generator.</span>
+                </label>
+              </div>
+
+              <aside class="profile-preview-card" aria-label="Profile preview">
+                <span id="profile-preview-avatar" class="profile-preview-avatar">BB</span>
+                <strong id="profile-preview-name" class="profile-preview-name">Bikal Bhandari</strong>
+                <span id="profile-preview-role" class="profile-preview-role">Admin</span>
+              </aside>
+            </div>
+          </section>
+        </section>
+
+        <footer class="app-footer">
+          <p>&copy; 2026 RFI Validator Working Project.</p>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <template id="rfi-submission-template">
+    <tr class="submission-row">
+      <td class="submission-number"></td>
+      <td><input type="text" data-field="Created Date" placeholder="MM/DD/YYYY" title="Accepted formats include MM/DD/YYYY, M/D/YYYY, and YYYY-MM-DD" /></td>
+      <td><input type="text" data-field="First Name" placeholder="First Name" /></td>
+      <td><input type="text" data-field="Last Name" placeholder="Last Name" /></td>
+      <td><input type="email" data-field="Email" placeholder="eg..embtest@asu.edu" /></td>
+      <td><input type="tel" data-field="Phone Number" placeholder="eg 555-123-4567" /></td>
+      <td>
+        <label class="checkbox-field" aria-label="Military Service">
+          <input type="checkbox" data-field="Military Service" />
+        </label>
+      </td>
+      <td><input type="url" data-field="ASUO Origin URL" placeholder="eg..https://asuonline.asu.edu/" /></td>
+      <td>
+        <div class="row-action-group">
+          <button class="ghost-button icon-button duplicate-submission-button" type="button" aria-label="Duplicate submission" title="Duplicate submission">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 9h11v11H9V9Zm-5-5h11v2H6v9H4V4Z" fill="currentColor" />
+            </svg>
+          </button>
+          <button class="ghost-button icon-button remove-submission-button" type="button" aria-label="Remove submission" title="Remove submission">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm1 6h2v8h-2V9Zm4 0h2v8h-2V9ZM7 9h2v8H7V9Zm1 12a2 2 0 0 1-2-2V8h12v11a2 2 0 0 1-2 2H8Z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </template>
+
+  <script src="rfi-core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

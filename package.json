@@ -1,0 +1,13 @@
+{
+  "name": "rfi-validator",
+  "private": true,
+  "scripts": {
+    "check": "node --check rfi-core.js && node --check app.js",
+    "test": "node --test Test/unit/**/*.test.js",
+    "test:e2e": "playwright test",
+    "verify": "npm run check && npm test && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
