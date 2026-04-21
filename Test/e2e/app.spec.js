@@ -53,6 +53,11 @@ async function openGenerator(page) {
   await expect(page.locator('#test-data-generator-view')).toBeVisible();
 }
 
+async function openResults(page) {
+  await page.locator('#nav-results').click();
+  await expect(page.locator('#results-view')).toBeVisible();
+}
+
 async function fillFirstRfiSubmission(page, values) {
   await openRfiInputs(page);
   await page.locator('#rfi-submissions .submission-row').first().locator('input[data-field="Created Date"]').fill(values.createdDate);
@@ -86,8 +91,16 @@ test('browser workflow supports upload, comparison, and download', async ({ page
   const downloadPromise = page.waitForEvent('download');
 
   await page.locator('#compare-button').click();
-  await expect(page.locator('#results-container')).toContainText('Exact match');
-  await expect(page.locator('#results-container')).toContainText('embtestbikalrfivalidation@asu.edu');
+  await expect(page.locator('#results-view')).toBeVisible();
+  await expect(page.locator('#results-page-container')).toContainText('Exact match');
+  await expect(page.locator('#results-page-container')).toContainText('embtestbikalrfivalidation@asu.edu');
+  await openDashboard(page);
+  await expect(page.locator('#dashboard-results-container')).toContainText('Results Summary');
+  await expect(page.locator('#dashboard-results-container')).toContainText('View Results');
+  await expect(page.locator('#dashboard-results-container')).not.toContainText('embtestbikalrfivalidation@asu.edu');
+  await page.locator('#dashboard-results-container [data-dashboard-results-action="view"]').click();
+  await expect(page.locator('#results-view')).toBeVisible();
+  await openDashboard(page);
   await expect(page.locator('#download-button')).toBeEnabled();
 
   await page.locator('#download-button').click();
@@ -115,6 +128,18 @@ test('Salesforce-only upload keeps compare disabled until an RFI row is provided
   await expect(page.locator('#compare-button')).toBeDisabled();
 });
 
+test('dashboard shows a compact readiness state before any comparison run', async ({ page }) => {
+  await page.goto('/');
+  await openDashboard(page);
+
+  await expect(page.locator('#dashboard-results-container')).toContainText('No comparison run yet');
+  await expect(page.locator('#dashboard-results-container')).toContainText('Waiting for input');
+  await expect(page.locator('#dashboard-results-container')).toContainText('Upload Salesforce Data');
+  await expect(page.locator('#dashboard-results-container')).toContainText('Upload RFI Data');
+  await expect(page.locator('#dashboard-results-container')).toContainText('Ready to Compare');
+  await expect(page.locator('#dashboard-results-container')).not.toContainText('View Results');
+});
+
 test('notification bell shows recent comparison activity', async ({ page }, testInfo) => {
   const csvPath = testInfo.outputPath('salesforce-export.csv');
   await createSalesforceCsvFixture(csvPath);
@@ -137,6 +162,29 @@ test('notification bell shows recent comparison activity', async ({ page }, test
   await page.locator('#notifications-button').click();
   await expect(page.locator('#notifications-list')).toContainText('Compared 1 RFI against 2 Salesforce records');
   await expect(page.locator('#notifications-badge')).toBeHidden();
+});
+
+test('results navigation shows the latest comparison output', async ({ page }, testInfo) => {
+  const csvPath = testInfo.outputPath('salesforce-export.csv');
+  await createSalesforceCsvFixture(csvPath);
+
+  await page.goto('/');
+  await fillFirstRfiSubmission(page, {
+    createdDate: '4/9/2026',
+    firstName: 'Embtest',
+    lastName: 'Embtest',
+    email: 'embtestbikalrfivalidation@asu.edu',
+    phoneNumber: '5023465433',
+    originUrl: 'https://qa.asuonline.asu.edu/'
+  });
+
+  await openDashboard(page);
+  await page.locator('#file-input').setInputFiles(csvPath);
+  await page.locator('#compare-button').click();
+
+  await openResults(page);
+  await expect(page.locator('#results-page-container')).toContainText('Comparison Results');
+  await expect(page.locator('#results-page-container')).toContainText('embtestbikalrfivalidation@asu.edu');
 });
 
 test('manual RFI rows do not prepopulate the created date', async ({ page }) => {

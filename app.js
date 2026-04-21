@@ -11,6 +11,7 @@ const rfiInputsView = document.getElementById('rfi-inputs-view');
 const testDataGeneratorView = document.getElementById('test-data-generator-view');
 const historyView = document.getElementById('history-view');
 const salesforceRecordsView = document.getElementById('salesforce-records-view');
+const resultsView = document.getElementById('results-view');
 const profileView = document.getElementById('profile-view');
 const historyEntriesEl = document.getElementById('history-entries');
 const addRfiButton = document.getElementById('add-rfi-button');
@@ -24,8 +25,9 @@ const rfiImportStatusEl = document.getElementById('rfi-import-status');
 const statusEl = document.getElementById('status');
 const previewContainer = document.getElementById('preview-container');
 const salesforceRecordsContainer = document.getElementById('salesforce-records-container');
-const resultsContainer = document.getElementById('results-container');
-const resultsCard = document.getElementById('results-card');
+const dashboardResultsContainer = document.getElementById('dashboard-results-container');
+const resultsPageContainer = document.getElementById('results-page-container');
+const resultsPageCard = document.getElementById('results-page-card');
 const submissionsContainer = document.getElementById('rfi-submissions');
 const submissionTemplate = document.getElementById('rfi-submission-template');
 const generatorUrlInput = document.getElementById('generator-url');
@@ -497,11 +499,14 @@ function setPreviewValidationState(label, toneClass) {
 }
 
 function setAppView(view) {
-  const nextView = ['dashboard', 'rfi-inputs', 'salesforce-records', 'test-data-generator', 'history', 'profile'].includes(view)
+  const nextView = ['dashboard', 'rfi-inputs', 'salesforce-records', 'results', 'test-data-generator', 'history', 'profile'].includes(view)
     ? view
     : 'dashboard';
   dashboardView.hidden = nextView !== 'dashboard';
   rfiInputsView.hidden = nextView !== 'rfi-inputs';
+  if (resultsView) {
+    resultsView.hidden = nextView !== 'results';
+  }
   if (testDataGeneratorView) {
     testDataGeneratorView.hidden = nextView !== 'test-data-generator';
   }
@@ -521,6 +526,12 @@ function setAppView(view) {
       link.removeAttribute('aria-current');
     }
   });
+}
+
+function openResultsView() {
+  setAppView('results');
+  resultsPageCard?.focus({ preventScroll: true });
+  resultsPageCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function deriveAvatarInitials(name) {
@@ -698,9 +709,7 @@ function openHistoryEntry(entry, statusMessage = `Opened history entry from ${en
   downloadButton.disabled = false;
   statusEl.textContent = statusMessage;
   setNotificationsPanelOpen(false);
-  setAppView('dashboard');
-  resultsCard.focus({ preventScroll: true });
-  resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  openResultsView();
 }
 
 function renderHistory() {
@@ -1155,12 +1164,180 @@ function renderPreview(records) {
   updateExportPreview();
 }
 
-function renderResults(results) {
+function getResultsSummaryStats(results) {
   const exactMatchCount = results.filter((result) => result.status === 'Exact match').length;
   const partialMatchCount = results.filter((result) => result.status === 'Partial match').length;
   const noMatchCount = results.filter((result) => result.status === 'No match').length;
-  const reviewCount = partialMatchCount + noMatchCount;
-  const comparedRfiCount = new Set(results.map((r) => r.submissionNumber)).size;
+
+  return {
+    exactMatchCount,
+    partialMatchCount,
+    noMatchCount,
+    reviewCount: partialMatchCount + noMatchCount,
+    comparedRfiCount: new Set(results.map((result) => result.submissionNumber)).size
+  };
+}
+
+function buildResultsSummaryMarkup(stats) {
+  return `
+    <div class="results-summary-grid">
+      <article class="result-stat-card exact-card">
+        <div class="result-stat-icon" aria-hidden="true">✓</div>
+        <div class="result-stat-content">
+          <strong>${stats.exactMatchCount}</strong>
+          <h3>Exact match</h3>
+          <p>Fields align perfectly with Salesforce records.</p>
+        </div>
+      </article>
+      <article class="result-stat-card partial-card">
+        <div class="result-stat-icon" aria-hidden="true">!</div>
+        <div class="result-stat-content">
+          <strong>${stats.partialMatchCount}</strong>
+          <h3>Partial match</h3>
+          <p>Some discrepancies were found in non-critical fields.</p>
+        </div>
+      </article>
+      <article class="result-stat-card no-match-card">
+        <div class="result-stat-icon" aria-hidden="true">×</div>
+        <div class="result-stat-content">
+          <strong>${stats.noMatchCount}</strong>
+          <h3>No match</h3>
+          <p>Record does not exist in the current dataset.</p>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
+function getDashboardReadinessState() {
+  const hasSalesforce = parsedRecords.length > 0;
+  const hasRfi = getMeaningfulRfiCount() > 0;
+  const hasRecognizedFields = fileDiagnostics.recognizedFields > 0;
+  const hasMissingFields = fileDiagnostics.missingFields.length > 0;
+
+  if (hasSalesforce && hasRfi && hasRecognizedFields && hasMissingFields) {
+    return {
+      title: 'Ready to compare with warnings',
+      message: `Both datasets are loaded. Comparison can run, but ${fileDiagnostics.missingFields.length} expected Salesforce field(s) are missing.`,
+      badgeLabel: 'Warnings',
+      badgeTone: 'warning-badge'
+    };
+  }
+
+  if (hasSalesforce && hasRfi && hasRecognizedFields) {
+    return {
+      title: 'Ready to compare',
+      message: 'Both datasets are loaded. Use Compare Results above to generate the validation output.',
+      badgeLabel: 'Ready',
+      badgeTone: 'success-badge'
+    };
+  }
+
+  if (hasSalesforce && !hasRecognizedFields) {
+    return {
+      title: 'Salesforce file needs review',
+      message: 'The uploaded export did not map to the expected comparison fields yet. Upload a corrected Salesforce CSV to continue.',
+      badgeLabel: 'Needs review',
+      badgeTone: 'error-badge'
+    };
+  }
+
+  if (hasSalesforce && !hasRfi) {
+    return {
+      title: 'Salesforce file ready',
+      message: 'Upload or enter at least one RFI row to unlock comparison results.',
+      badgeLabel: 'Waiting on RFI',
+      badgeTone: 'neutral-badge'
+    };
+  }
+
+  if (!hasSalesforce && hasRfi) {
+    return {
+      title: 'RFI data ready',
+      message: 'Upload a Salesforce export to complete the comparison setup.',
+      badgeLabel: 'Waiting on Salesforce',
+      badgeTone: 'neutral-badge'
+    };
+  }
+
+  return {
+    title: 'No comparison run yet',
+    message: 'Upload a Salesforce export and at least one RFI row to generate results.',
+    badgeLabel: 'Waiting for input',
+    badgeTone: 'neutral-badge'
+  };
+}
+
+function buildDashboardResultsMarkup(results) {
+  const stats = getResultsSummaryStats(results);
+
+  if (!results.length) {
+    const readiness = getDashboardReadinessState();
+    const hasSalesforce = parsedRecords.length > 0;
+    const hasRfi = getMeaningfulRfiCount() > 0;
+    const compareReady = hasSalesforce && hasRfi && fileDiagnostics.recognizedFields > 0;
+
+    return `
+      <section class="dashboard-results-panel">
+        <div class="dashboard-results-header">
+          <div>
+            <p class="section-label">Latest Comparison</p>
+            <h2>${escapeHtml(readiness.title)}</h2>
+            <p class="supporting-text">${escapeHtml(readiness.message)}</p>
+          </div>
+          <span class="validation-badge ${readiness.badgeTone}">${escapeHtml(readiness.badgeLabel)}</span>
+        </div>
+        <div class="dashboard-readiness-card">
+          <div class="dashboard-readiness-content">
+            <strong>Workflow progress</strong>
+            <div class="dashboard-readiness-steps" role="list" aria-label="Comparison readiness">
+              <span class="dashboard-readiness-step ${hasSalesforce ? 'complete' : 'current'}" role="listitem">
+                <span class="dashboard-readiness-marker" aria-hidden="true">${hasSalesforce ? '&#10003;' : '1'}</span>
+                <span class="dashboard-readiness-label">Upload Salesforce Data</span>
+              </span>
+              <span class="dashboard-readiness-step ${hasRfi ? 'complete' : (hasSalesforce ? 'current' : 'pending')}" role="listitem">
+                <span class="dashboard-readiness-marker" aria-hidden="true">${hasRfi ? '&#10003;' : '2'}</span>
+                <span class="dashboard-readiness-label">Upload RFI Data</span>
+              </span>
+              <span class="dashboard-readiness-step ${compareReady ? 'current' : 'pending'}" role="listitem">
+                <span class="dashboard-readiness-marker" aria-hidden="true">3</span>
+                <span class="dashboard-readiness-label">Ready to Compare</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  return `
+    <section class="dashboard-results-panel">
+      <div class="dashboard-results-header">
+        <div>
+          <p class="section-label">Latest Comparison</p>
+          <h2>Results Summary</h2>
+          <p class="supporting-text">The full comparison table, search, and row-level review live on the Results page.</p>
+        </div>
+        <button class="secondary-button dashboard-results-link-button" type="button" data-dashboard-results-action="view">View Results</button>
+      </div>
+      ${buildResultsSummaryMarkup(stats)}
+      <div class="dashboard-results-meta">
+        <span class="results-tab active">${stats.exactMatchCount} matched records</span>
+        <span class="results-tab">${stats.reviewCount} records requiring review</span>
+        <span class="results-tab">${stats.comparedRfiCount} RFI submissions</span>
+      </div>
+    </section>
+  `;
+}
+
+function buildResultsMarkup(results, searchInputId) {
+  const {
+    exactMatchCount,
+    partialMatchCount,
+    noMatchCount,
+    reviewCount,
+    comparedRfiCount
+  } = getResultsSummaryStats(results);
   const filteredResults = sortResults(results).filter((result) => {
     const query = normalizeValue(resultsSearchQuery);
     if (!query) return true;
@@ -1188,32 +1365,11 @@ function renderResults(results) {
   const totalPages = Math.max(1, Math.ceil(Math.max(showingCount, 1) / 10));
 
   const summary = `
-    <div class="results-summary-grid">
-      <article class="result-stat-card exact-card">
-        <div class="result-stat-icon" aria-hidden="true">✓</div>
-        <div class="result-stat-content">
-          <strong>${exactMatchCount}</strong>
-          <h3>Exact match</h3>
-          <p>Fields align perfectly with Salesforce records.</p>
-        </div>
-      </article>
-      <article class="result-stat-card partial-card">
-        <div class="result-stat-icon" aria-hidden="true">!</div>
-        <div class="result-stat-content">
-          <strong>${partialMatchCount}</strong>
-          <h3>Partial match</h3>
-          <p>Some discrepancies were found in non-critical fields.</p>
-        </div>
-      </article>
-      <article class="result-stat-card no-match-card">
-        <div class="result-stat-icon" aria-hidden="true">×</div>
-        <div class="result-stat-content">
-          <strong>${noMatchCount}</strong>
-          <h3>No match</h3>
-          <p>Record does not exist in the current dataset.</p>
-        </div>
-      </article>
-    </div>
+    ${buildResultsSummaryMarkup({
+      exactMatchCount,
+      partialMatchCount,
+      noMatchCount
+    })}
     <section class="results-table-panel">
       <div class="results-panel-header">
         <div>
@@ -1225,14 +1381,14 @@ function renderResults(results) {
           </div>
         </div>
         <div class="results-controls">
-          <label class="results-search" for="results-search-input">
+          <label class="results-search" for="${searchInputId}">
             <span class="results-search-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24">
                 <path d="M10 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0-2a8 8 0 1 0 4.9 14.33l4.38 4.38 1.42-1.42-4.38-4.38A8 8 0 0 0 10 2Z" fill="currentColor" />
               </svg>
             </span>
             <input
-              id="results-search-input"
+              id="${searchInputId}"
               class="results-search-input"
               type="search"
               placeholder="Search records..."
@@ -1249,7 +1405,7 @@ function renderResults(results) {
   `;
 
   if (!results.length) {
-    resultsContainer.innerHTML = `
+    return `
       ${summary}
       <div class="results-panel-empty">
         <p>Upload a Salesforce export, import RFI bulk data or prepare manual rows, and run a comparison to review exact matches, partial matches, and gaps.</p>
@@ -1264,11 +1420,10 @@ function renderResults(results) {
       </div>
     </section>
     `;
-    return;
   }
 
   if (!filteredResults.length) {
-    resultsContainer.innerHTML = `
+    return `
       ${summary}
       <div class="results-panel-empty">
         <p>No comparison results match that search.</p>
@@ -1283,7 +1438,6 @@ function renderResults(results) {
       </div>
     </section>
     `;
-    return;
   }
 
   const rows = filteredResults.map((result) => {
@@ -1332,7 +1486,7 @@ function renderResults(results) {
     `;
   }).join('');
 
-  resultsContainer.innerHTML = `
+  return `
     ${summary}
     <div class="results-table-wrap">
       <table class="results-table">
@@ -1361,6 +1515,16 @@ function renderResults(results) {
     </div>
     </section>
   `;
+}
+
+function renderResults(results) {
+  if (dashboardResultsContainer) {
+    dashboardResultsContainer.innerHTML = buildDashboardResultsMarkup(results);
+  }
+
+  if (resultsPageContainer) {
+    resultsPageContainer.innerHTML = buildResultsMarkup(results, 'results-page-search-input');
+  }
 }
 
 function downloadCsv(results) {
@@ -1787,9 +1951,7 @@ compareButton.addEventListener('click', () => {
   recordHistoryRun(comparisonResults, rfis.length);
   downloadButton.disabled = false;
   statusEl.textContent = `Compared ${rfis.length} RFI submission(s) against ${parsedRecords.length} Salesforce record(s). Showing the best unique match per RFI.`;
-  setAppView('dashboard');
-  resultsCard.focus({ preventScroll: true });
-  resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  openResultsView();
 });
 
 downloadButton.addEventListener('click', () => {
@@ -1872,10 +2034,16 @@ historyEntriesEl.addEventListener('click', (event) => {
   openHistoryEntry(entry);
 });
 
-resultsContainer.addEventListener('input', (event) => {
-  if (event.target.id !== 'results-search-input') return;
+resultsPageContainer?.addEventListener('input', (event) => {
+  if (!event.target.classList.contains('results-search-input')) return;
   resultsSearchQuery = event.target.value;
   renderResults(comparisonResults);
+});
+
+dashboardResultsContainer?.addEventListener('click', (event) => {
+  const actionButton = event.target.closest('[data-dashboard-results-action="view"]');
+  if (!actionButton || !comparisonResults.length) return;
+  openResultsView();
 });
 
 if (notificationsButton && notificationsPanel) {

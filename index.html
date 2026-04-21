@@ -45,6 +45,14 @@
           </span>
           <span>Salesforce Records</span>
         </a>
+        <a id="nav-results" class="topbar-link sidebar-link" href="#" data-view="results">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 5h16v4H4V5Zm0 5.5h10v3H4v-3Zm0 4.5h16v4H4v-4Zm11-4.5h5v3h-5v-3Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Results</span>
+        </a>
         <a id="nav-test-data-generator" class="topbar-link sidebar-link" href="#" data-view="test-data-generator">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -306,8 +314,8 @@
             </div>
 
             <section class="results-section">
-              <section class="card results-card" id="results-card" tabindex="-1">
-                <div id="results-container"></div>
+              <section class="card results-card" id="results-card">
+                <div id="dashboard-results-container"></div>
               </section>
             </section>
           </section>
@@ -610,6 +618,24 @@
               </div>
             </div>
             <div id="salesforce-records-container" class="preview-body-container"></div>
+          </section>
+        </section>
+
+        <section id="results-view" class="app-view results-view" hidden>
+          <section class="page-intro">
+            <h1>Results</h1>
+            <p>Review the latest comparison output in a dedicated workspace after uploading Salesforce and RFI CSV files.</p>
+          </section>
+
+          <section id="results-page-card" class="card results-view-card" tabindex="-1">
+            <div class="results-view-header">
+              <div>
+                <p class="section-label">Comparison Output</p>
+                <h2>Validation Results</h2>
+                <p class="supporting-text">This page mirrors the latest comparison run from Dashboard and History.</p>
+              </div>
+            </div>
+            <div id="results-page-container" class="results-view-body"></div>
           </section>
         </section>
 
