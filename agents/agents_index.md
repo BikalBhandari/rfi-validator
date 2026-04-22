@@ -10,3 +10,7 @@ This folder contains the agent role definitions for the rfi-validator project.
 - `Test_Automation_Engineer.md`
 - `DevOps_Agent.md`
 - `Documentation_Agent.md`
+- `Checkpoint_Agent.md`
+
+Supporting file:
+- `Runbook.md` - orchestration guide for running these agents
