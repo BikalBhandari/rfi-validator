@@ -47,17 +47,17 @@ Specific focus for this run:
 
 ## Product Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Product_Agent.md`
+Agent file: `agents/Product_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Product_Agent.md.
+Act as the agent defined in agents/Product_Agent.md.
 Follow that file exactly.
 
 Task:
 Review and refine the product requirements for rfi-validator based on the existing PRD.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/RFI_Validator_PRD.md
+- RFI_Validator_PRD.md
 - Relevant project files in this repo
 
 Output:
@@ -79,17 +79,17 @@ PRODUCT AGENT DONE
 
 ## Design Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Design_Agent.md`
+Agent file: `agents/Design_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Design_Agent.md.
+Act as the agent defined in agents/Design_Agent.md.
 Follow that file exactly.
 
 Task:
 Design the UX, page flow, and interaction model for the current rfi-validator requirements.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/RFI_Validator_PRD.md
+- RFI_Validator_PRD.md
 - Relevant existing app files in the repo
 - Product Agent output if available
 
@@ -113,17 +113,17 @@ DESIGN AGENT DONE
 
 ## Development Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Development_Agent.md`
+Agent file: `agents/Development_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Development_Agent.md.
+Act as the agent defined in agents/Development_Agent.md.
 Follow that file exactly.
 
 Task:
 Implement the next approved rfi-validator feature or fix based on the PRD and design guidance.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/RFI_Validator_PRD.md
+- RFI_Validator_PRD.md
 - Design Agent output if available
 - Relevant source files in this repo
 
@@ -144,17 +144,17 @@ DEVELOPMENT AGENT DONE
 
 ## Integration Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Integration_Agent.md`
+Agent file: `agents/Integration_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Integration_Agent.md.
+Act as the agent defined in agents/Integration_Agent.md.
 Follow that file exactly.
 
 Task:
 Design or implement the integration aspects for rfi-validator, including data refresh workflow, storage approach, import/export handling, and future Salesforce integration readiness.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/RFI_Validator_PRD.md
+- RFI_Validator_PRD.md
 - Relevant code and config files in this repo
 - Development Agent output if available
 
@@ -175,17 +175,17 @@ INTEGRATION AGENT DONE
 
 ## Test Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Test_Agent.md`
+Agent file: `agents/Test_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Test_Agent.md.
+Act as the agent defined in agents/Test_Agent.md.
 Follow that file exactly.
 
 Task:
 Run a QA pass against the current rfi-validator app.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/Test Data/report1775759327714.csv
+- Test/data/report1775759327714.csv
 - Relevant app files and current implementation
 
 Output:
@@ -207,15 +207,15 @@ TEST AGENT DONE
 ```
 
 ## Test Automation Engineer
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Test_Automation_Engineer.md.
+Act as the agent defined in agents/Test_Automation_Engineer.md.
 Follow that file exactly.
 
 Task:
 Run automated browser-based validation for the current rfi-validator app.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/Test Data/report1775759327714_rfi_fixture.json
-- /Users/bbhanda1/Desktop/RFI Validator/Test Data/report1775759327714.csv
+- Test/data/report1775759327714_rfi_fixture.json
+- Test/data/report1775759327714.csv
 - Relevant test and app files in the repo
 - App URL: [put local URL here, for example http://localhost:3000]
 - If the app is not already running, start it using: [put command here]
@@ -243,17 +243,17 @@ TEST AUTOMATION ENGINEER DONE
 
 ## Documentation Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Documentation_Agent.md`
+Agent file: `agents/Documentation_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Documentation_Agent.md.
+Act as the agent defined in agents/Documentation_Agent.md.
 Follow that file exactly.
 
 Task:
 Update project documentation for the current state of rfi-validator.
 
 Inputs:
-- /Users/bbhanda1/Desktop/RFI Validator/RFI_Validator_PRD.md
+- RFI_Validator_PRD.md
 - Relevant changed files in the repo
 - Test and development outputs if available
 
@@ -272,10 +272,10 @@ DOCUMENTATION AGENT DONE
 
 ## Checkpoint Agent
 
-Agent file: `/Users/bbhanda1/Desktop/RFI Validator/agents/Checkpoint_Agent.md`
+Agent file: `agents/Checkpoint_Agent.md`
 
 ```text
-Act as the agent defined in /Users/bbhanda1/Desktop/RFI Validator/agents/Checkpoint_Agent.md.
+Act as the agent defined in agents/Checkpoint_Agent.md.
 Follow that file exactly.
 
 Task:
