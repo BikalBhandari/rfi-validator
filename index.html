@@ -161,11 +161,11 @@
 
           <div class="topbar-user">
             <div class="topbar-user-copy">
-              <div class="topbar-user-name">Bikal Bhandari</div>
-              <div class="topbar-user-role">Admin</div>
+              <div class="topbar-user-name">Workspace User</div>
+              <div class="topbar-user-role">Profile not set</div>
             </div>
             <button class="topbar-avatar-button" type="button" aria-label="User profile">
-              <span class="topbar-avatar">BB</span>
+              <span class="topbar-avatar">U</span>
             </button>
           </div>
         </div>
@@ -632,34 +632,38 @@
               <div class="profile-form-grid">
                 <label class="profile-field">
                   <span class="generator-field-label">Full Name</span>
-                  <input id="profile-name" type="text" placeholder="e.g. Bikal Bhandari" />
+                  <input id="profile-name" type="text" placeholder="Enter full name" />
                 </label>
                 <label class="profile-field">
                   <span class="generator-field-label">Role</span>
-                  <input id="profile-role" type="text" placeholder="e.g. Admin" />
+                  <input id="profile-role" type="text" placeholder="Enter role" />
                 </label>
                 <label class="profile-field" id="profile-avatar-field">
                   <span class="generator-field-label">Avatar (2 chars)</span>
-                  <input id="profile-avatar" type="text" placeholder="e.g. BB" />
+                  <input id="profile-avatar" type="text" placeholder="Optional initials" />
                 </label>
                 <label class="profile-field">
                   <span class="generator-field-label">Test Data Generator Identifier</span>
-                  <input id="profile-identifier" type="text" placeholder="e.g. ID_9921" />
+                  <input id="profile-identifier" type="text" placeholder="Optional identifier" />
                   <span class="profile-helper">Used as the default identifier in the Test Data Generator.</span>
                 </label>
+                <div class="profile-actions">
+                  <button id="profile-save-button" class="primary-button profile-save-button" type="button" disabled>Save Profile</button>
+                  <p id="profile-save-status" class="status profile-save-status" aria-live="polite">Save profile to update the workspace identity.</p>
+                </div>
               </div>
 
               <aside class="profile-preview-card" aria-label="Profile preview">
-                <span id="profile-preview-avatar" class="profile-preview-avatar">BB</span>
-                <strong id="profile-preview-name" class="profile-preview-name">Bikal Bhandari</strong>
-                <span id="profile-preview-role" class="profile-preview-role">Admin</span>
+                <span id="profile-preview-avatar" class="profile-preview-avatar">U</span>
+                <strong id="profile-preview-name" class="profile-preview-name">Workspace User</strong>
+                <span id="profile-preview-role" class="profile-preview-role">Profile not set</span>
               </aside>
             </div>
           </section>
         </section>
 
         <footer class="app-footer">
-          <p>&copy; 2026 RFI Validator Working Project.</p>
+          <p>&copy; 2026 RFI Validator Project.</p>
         </footer>
       </main>
     </div>
