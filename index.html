@@ -21,50 +21,73 @@
       </div>
 
       <nav class="sidebar-nav" aria-label="Primary">
-        <a id="nav-dashboard" class="topbar-link sidebar-link active" href="#" data-view="dashboard" aria-current="page">
+        <a id="nav-dashboard" class="topbar-link sidebar-link active" href="#" data-view="dashboard" aria-current="page" title="Dashboard">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="3.5" width="7" height="7" rx="1.8" />
+              <rect x="13.5" y="3.5" width="7" height="5" rx="1.8" />
+              <rect x="3.5" y="13.5" width="7" height="7" rx="1.8" />
+              <rect x="13.5" y="11.5" width="7" height="9" rx="1.8" />
             </svg>
           </span>
           <span>Dashboard</span>
         </a>
-        <a id="nav-rfi-inputs" class="topbar-link sidebar-link" href="#" data-view="rfi-inputs">
+        <a id="nav-validation" class="topbar-link sidebar-link" href="#" data-view="validation" title="Compare">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4h-2V6H5v12h14v-4h2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Zm9 2 6 4-6 4v-3H7v-2h5V8Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3.5" y="5" width="6.5" height="14" rx="1.8" />
+              <rect x="14" y="5" width="6.5" height="14" rx="1.8" />
+              <path d="m12 8.5 2-2 2 2" />
+              <path d="M14 6.5h-4" />
+              <path d="m12 15.5-2 2-2-2" />
+              <path d="M10 17.5h4" />
             </svg>
           </span>
-          <span>RFI Inputs</span>
+          <span>Compare</span>
         </a>
-        <a id="nav-salesforce-records" class="topbar-link sidebar-link" href="#" data-view="salesforce-records">
+        <a id="nav-results" class="topbar-link sidebar-link" href="#" data-view="results" title="Results">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3c-4.97 0-9 1.57-9 3.5S7.03 10 12 10s9-1.57 9-3.5S16.97 3 12 3Zm-9 7.5V13c0 1.93 4.03 3.5 9 3.5s9-1.57 9-3.5v-2.5c-1.84 1.43-5.35 2.25-9 2.25S4.84 11.93 3 10.5Zm0 6V18.5C3 20.43 7.03 22 12 22s9-1.57 9-3.5v-2c-1.84 1.43-5.35 2.25-9 2.25S4.84 17.93 3 16.5Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 4.5h7l3.5 3.5V19A1.5 1.5 0 0 1 16 20.5H7A1.5 1.5 0 0 1 5.5 19V6A1.5 1.5 0 0 1 7 4.5Z" />
+              <path d="M14 4.5V8h3.5" />
+              <path d="M8.5 12.5h7" />
+              <path d="M8.5 16h4.5" />
             </svg>
           </span>
-          <span>Salesforce Records</span>
+          <span>Results</span>
         </a>
-        <a id="nav-test-data-generator" class="topbar-link sidebar-link" href="#" data-view="test-data-generator">
+        <a id="nav-test-data-generator" class="topbar-link sidebar-link" href="#" data-view="test-data-generator" title="Data Generator">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M6 2h2v6H6V2Zm10 0h2v9h-2V2ZM11 2h2v14h-2V2ZM4 9h6v2H8v11H6V11H4V9Zm7 8h6v2h-2v3h-2v-3h-2v-2Zm5-5h4v2h-1v8h-2v-8h-1v-2Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 4.5v4" />
+              <path d="M17 4.5v4" />
+              <path d="M5 8.5h14" />
+              <rect x="4.5" y="8.5" width="15" height="11" rx="2" />
+              <path d="M8 12.5h3" />
+              <path d="M8 16h3" />
+              <path d="M14.5 12.5h.01" />
+              <path d="M17 12.5h.01" />
+              <path d="M14.5 16h.01" />
+              <path d="M17 16h.01" />
             </svg>
           </span>
-          <span>Test Data Generator</span>
+          <span>Data Generator</span>
         </a>
-        <a id="nav-history" class="topbar-link sidebar-link" href="#" data-view="history">
+        <a id="nav-history" class="topbar-link sidebar-link" href="#" data-view="history" title="History">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M11 7h2v6l5 3-1 1.73-6-3.6V7ZM12 2a10 10 0 1 1-7.07 2.93L2 8h7V1L6.34 3.66A12 12 0 1 0 12 0v2Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3.5v4H4" />
+              <path d="M8.2 7.2A8.5 8.5 0 1 1 5 13.5" />
+              <path d="M12 8.5v4l2.75 1.75" />
             </svg>
           </span>
           <span>History</span>
         </a>
-        <a id="nav-profile" class="topbar-link sidebar-link" href="#" data-view="profile">
+        <a id="nav-profile" class="topbar-link sidebar-link" href="#" data-view="profile" title="Profile">
           <span class="nav-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z" fill="currentColor" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8.5" r="3.5" />
+              <path d="M5 19.5a7 7 0 0 1 14 0" />
             </svg>
           </span>
           <span>Profile</span>
@@ -72,7 +95,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <button id="appearance-button" class="sidebar-appearance-button" type="button" aria-expanded="false" aria-controls="appearance-panel">
+        <button id="appearance-button" class="sidebar-appearance-button" type="button" aria-expanded="false" aria-controls="appearance-panel" title="Open appearance settings">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M21 12.79A9 9 0 0 1 11.21 3c0-.34.02-.67.05-1A1 1 0 0 0 10 1a11 11 0 1 0 13 13 1 1 0 0 0-1.26-1.21c-.24.04-.49.06-.74.06Z" fill="currentColor" />
@@ -86,7 +109,7 @@
             <span>Choose the workspace theme.</span>
           </div>
           <div class="appearance-options" role="radiogroup" aria-label="Theme options">
-            <button class="appearance-option active" type="button" data-theme-option="light" role="radio" aria-checked="true">
+            <button class="appearance-option" type="button" data-theme-option="light" role="radio" aria-checked="false">
               <span class="appearance-swatch swatch-light" aria-hidden="true"></span>
               <span class="appearance-option-copy">
                 <span>Light</span>
@@ -100,6 +123,7 @@
                 <small>Low-light contrast</small>
               </span>
             </button>
+            <!--
             <button class="appearance-option" type="button" data-theme-option="retro" role="radio" aria-checked="false">
               <span class="appearance-swatch swatch-retro" aria-hidden="true"></span>
               <span class="appearance-option-copy">
@@ -114,7 +138,8 @@
                 <small>Flat editorial gray</small>
               </span>
             </button>
-            <button class="appearance-option" type="button" data-theme-option="asu" role="radio" aria-checked="false">
+            -->
+            <button class="appearance-option active" type="button" data-theme-option="asu" role="radio" aria-checked="true">
               <span class="appearance-swatch swatch-asu" aria-hidden="true"></span>
               <span class="appearance-option-copy">
                 <span>ASU</span>
@@ -138,6 +163,7 @@
               class="topbar-icon-button"
               type="button"
               aria-label="Notifications"
+              title="Open notifications"
               aria-expanded="false"
               aria-controls="notifications-panel"
             >
@@ -164,7 +190,7 @@
               <div class="topbar-user-name">Workspace User</div>
               <div class="topbar-user-role">Profile not set</div>
             </div>
-            <button class="topbar-avatar-button" type="button" aria-label="User profile">
+            <button class="topbar-avatar-button" type="button" aria-label="User profile" title="Open user profile">
               <span class="topbar-avatar">U</span>
             </button>
           </div>
@@ -173,150 +199,349 @@
 
       <main class="app-shell">
         <section id="dashboard-view" class="app-view dashboard-view">
-          <section class="page-intro">
-            <h1>Dashboard</h1>
-            <p>Upload Salesforce data, import RFI bulk data, review export status, and run comparison from one workflow page.</p>
+          <section class="page-intro dashboard-page-intro dashboard-page-intro-compact">
+            <h1 id="dashboard-page-title">Dashboard</h1>
+            <p id="dashboard-page-subtitle">Comparison health, export readiness, and review attention from the current session.</p>
           </section>
 
-          <section class="dashboard-stack">
-            <div class="dashboard-grid dashboard-grid-top">
-              <section class="card export-upload-card">
-                <div class="card-header-row">
-                  <p class="section-label">Salesforce Export File</p>
-                  <span class="card-header-icon" aria-hidden="true">
+          <section id="dashboard-empty-state" class="dashboard-empty-layout" hidden aria-label="Dashboard empty state">
+            <div class="dashboard-empty-stats">
+              <article class="dashboard-empty-stat-card">
+                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-blue" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M7 4h7l5 5v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm6 1.5V10h4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16V11.5m0 0-2 2m2-2 2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="dashboard-empty-stat-title">RFI Submission</span>
+                <strong class="dashboard-empty-stat-value">0</strong>
+                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
+              </article>
+
+              <article class="dashboard-empty-stat-card">
+                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-blue" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 7.5C5 6.12 8.13 5 12 5s7 1.12 7 2.5S15.87 10 12 10 5 8.88 5 7.5Zm0 5C5 13.88 8.13 15 12 15s7-1.12 7-2.5M5 12.5V17c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="dashboard-empty-stat-title">Salesforce Records</span>
+                <strong class="dashboard-empty-stat-value">0</strong>
+                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
+              </article>
+
+              <article class="dashboard-empty-stat-card">
+                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-green" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="m7.5 12.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/>
+                  </svg>
+                </span>
+                <span class="dashboard-empty-stat-title">Exact Match</span>
+                <strong class="dashboard-empty-stat-value">0</strong>
+                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
+              </article>
+
+              <article class="dashboard-empty-stat-card">
+                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-red" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M9 9l6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/>
+                  </svg>
+                </span>
+                <span class="dashboard-empty-stat-title">No Match</span>
+                <strong class="dashboard-empty-stat-value">0</strong>
+                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
+              </article>
+            </div>
+
+            <aside class="dashboard-empty-overview-card" aria-label="Readiness overview">
+              <h2>Readiness Overview</h2>
+              <div class="dashboard-empty-ring" aria-hidden="true">
+                <div class="dashboard-empty-ring-center">
+                  <span class="dashboard-empty-ring-icon">
                     <svg viewBox="0 0 24 24">
-                      <path d="M18 17v2H6v-2H4v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2h-2Zm-6-1 5-5h-3V4h-4v7H7l5 5Z" fill="currentColor" />
+                      <path d="M5 18h14M8 15V9m4 6V6m4 9v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
                   </span>
+                  <span class="dashboard-empty-ring-label">SYSTEM IDLE</span>
+                </div>
+              </div>
+              <p>Upload RFI submissions and a Salesforce export to begin validation, matching, and readiness review.</p>
+              <button id="dashboard-empty-start-button" class="primary-button dashboard-empty-start-button" type="button">Start Analysis</button>
+            </aside>
+          </section>
+
+          <section class="dashboard-analytics-shell">
+            <div id="dashboard-analytics-content" class="dashboard-loaded-layout">
+              <div class="dashboard-loaded-overview-grid">
+                <div class="dashboard-stat-grid">
+                  <section class="dashboard-stat-card" aria-label="Submission summary">
+                    <span class="dashboard-stat-label">RFI Submission</span>
+                    <strong id="dashboard-stat-submissions" class="dashboard-stat-value">0</strong>
+                    <p id="dashboard-stat-submissions-copy" class="dashboard-stat-copy">RFI rows prepared</p>
+                  </section>
+
+                  <section class="dashboard-stat-card" aria-label="Salesforce records summary">
+                    <span class="dashboard-stat-label">Salesforce Records</span>
+                    <strong id="dashboard-stat-salesforce" class="dashboard-stat-value">0</strong>
+                    <p id="dashboard-stat-salesforce-copy" class="dashboard-stat-copy">Rows loaded from export</p>
+                  </section>
+
+                  <section class="dashboard-stat-card" aria-label="Exact match summary">
+                    <span class="dashboard-stat-label">Exact Match</span>
+                    <strong id="dashboard-stat-exact" class="dashboard-stat-value dashboard-stat-value-positive">0</strong>
+                    <p id="dashboard-stat-exact-copy" class="dashboard-stat-copy">0% match rate</p>
+                  </section>
+
+                  <section class="dashboard-stat-card" aria-label="No match summary">
+                    <span class="dashboard-stat-label">No Match</span>
+                    <strong id="dashboard-stat-no-match" class="dashboard-stat-value dashboard-stat-value-negative">0</strong>
+                    <p id="dashboard-stat-no-match-copy" class="dashboard-stat-copy">No record in export</p>
+                  </section>
                 </div>
 
-                <input class="file-input-hidden" type="file" id="file-input" accept=".csv,text/csv" />
-                <label class="upload-dropzone" for="file-input">
-                  <span class="upload-dropzone-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm1 7V5.5L18.5 9H16a1 1 0 0 1-1-1ZM8 14.5l2.6-2.6 1.8 1.8 2.6-2.6L18 14.1V17H8v-2.5Zm4.75-3.25 1.5 1.5V10h2l-4-4-4 4h2v4.75l1.5-1.5Z" fill="currentColor" />
-                    </svg>
-                  </span>
-                  <span class="upload-dropzone-copy">Drag and drop your export here</span>
-                  <span class="upload-dropzone-subcopy">Supports CSV only (Max 500 rows)</span>
-                  <span class="upload-dropzone-button">Choose File</span>
-                </label>
-                <div id="status" class="status export-status"></div>
-              </section>
-
-              <section class="card dashboard-upload-card">
-                <div class="rfi-import-panel">
-                  <div class="rfi-import-header">
-                    <div class="rfi-import-copy">
-                      <p class="section-label">RFI Bulk Data</p>
-                      <h3>Upload RFI CSV</h3>
-                      <p class="supporting-text">Append RFI rows from a CSV file. Imported rows remain editable from the RFI Inputs page.</p>
-                    </div>
-                    <span class="rfi-import-tag">RFI</span>
+                <section class="dashboard-loaded-card dashboard-chart-panel" aria-label="Readiness overview">
+                  <div class="dashboard-loaded-section-header">
+                    <h2 id="dashboard-chart-title">Readiness Overview</h2>
+                    <span id="dashboard-chart-mode" class="dashboard-chart-mode" hidden>Awaiting compare</span>
                   </div>
 
-                  <div class="rfi-import-grid dashboard-rfi-import-grid">
-                    <div class="rfi-import-field">
-                      <label class="file-input-label" for="rfi-csv-input">Upload RFI CSV</label>
-                      <input class="dashboard-rfi-input" type="file" id="rfi-csv-input" accept=".csv,text/csv" />
-                      <p class="supporting-text">Use a CSV with headers that map to the RFI fields shown in the manual entry table. Max 500 rows.</p>
-                      <div class="rfi-template-download">
-                        <span class="rfi-template-label">First time here?</span>
-                        <a
-                          class="rfi-template-link"
-                          href="sample_rfi-entered_timestamp.csv"
-                          download="sample_rfi-entered_timestamp.csv"
-                        >
-                          <span class="download-action-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" focusable="false">
-                              <path d="M12 3a1 1 0 0 1 1 1v8.59l2.3-2.29a1 1 0 1 1 1.4 1.41l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.41L11 12.59V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z" fill="currentColor" />
-                            </svg>
-                          </span>
-                          Download Sample CSV
-                        </a>
+                  <div class="dashboard-loaded-readiness-body">
+                    <div class="dashboard-chart-stage">
+                      <div id="dashboard-chart-ring" class="dashboard-chart-ring" aria-hidden="true">
+                        <svg class="dashboard-chart-ring-svg" viewBox="0 0 100 100" focusable="false">
+                          <circle class="dashboard-chart-ring-track" cx="50" cy="50" r="40" pathLength="100"></circle>
+                          <circle class="dashboard-chart-ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle>
+                        </svg>
+                        <div class="dashboard-chart-ring-center">
+                          <strong id="dashboard-chart-value">0%</strong>
+                          <span id="dashboard-chart-value-label">Ready</span>
+                        </div>
                       </div>
                     </div>
+                    <div id="dashboard-chart-legend" class="dashboard-chart-legend"></div>
                   </div>
 
-                  <p id="rfi-import-status" class="status rfi-import-status">You can import CSV rows here and refine them in RFI Inputs.</p>
-                </div>
-              </section>
+                  <p id="dashboard-chart-caption" class="dashboard-chart-caption" hidden>Upload both datasets to begin comparison setup.</p>
+
+                  <div class="dashboard-loaded-health-footer dashboard-chart-cta">
+                    <div class="dashboard-loaded-health-summary">
+                      <span class="dashboard-loaded-health-icon-cluster" aria-hidden="true">
+                        <span class="dashboard-loaded-health-icon dashboard-loaded-health-icon-blue">
+                          <svg viewBox="0 0 24 24">
+                            <path d="M7 4h7l5 5v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm6 1.5V10h4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 16V11.5m0 0-2 2m2-2 2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                        <span class="dashboard-loaded-health-icon dashboard-loaded-health-icon-lilac">
+                          <svg viewBox="0 0 24 24">
+                            <path d="M12 5c-3.87 0-7 1.12-7 2.5S8.13 10 12 10s7-1.12 7-2.5S15.87 5 12 5Zm-7 5v3.5C5 14.88 8.13 16 12 16s7-1.12 7-2.5V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 13.5V17c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                      </span>
+                      <p id="dashboard-run-footer" class="dashboard-run-footer">Load source data in Compare to populate this dashboard.</p>
+                    </div>
+                    <button id="dashboard-run-badge" class="dashboard-run-badge" type="button" disabled>Awaiting inputs</button>
+                  </div>
+                </section>
+              </div>
+
+              <div class="dashboard-loaded-main-grid">
+                <section class="dashboard-loaded-card dashboard-field-panel" aria-label="Field mapping check">
+                  <div class="dashboard-loaded-section-header dashboard-loaded-field-header">
+                    <div>
+                      <h2>Field Mapping Check</h2>
+                      <p class="dashboard-field-helper">Header detection only</p>
+                    </div>
+                    <span class="dashboard-loaded-field-badge">Diagnostic</span>
+                  </div>
+                  <div id="dashboard-field-bars" class="dashboard-field-bars"></div>
+                </section>
+
+                <section class="dashboard-loaded-card dashboard-health-panel" aria-label="Run health">
+                  <div class="dashboard-loaded-section-header dashboard-loaded-health-header">
+                    <h2>Run Health - Proportional Breakdown</h2>
+                  </div>
+
+                  <div class="dashboard-health-track">
+                    <span id="dashboard-health-exact-segment" class="dashboard-health-segment dashboard-health-segment-exact"></span>
+                    <span id="dashboard-health-partial-segment" class="dashboard-health-segment dashboard-health-segment-partial"></span>
+                    <span id="dashboard-health-no-match-segment" class="dashboard-health-segment dashboard-health-segment-no-match"></span>
+                  </div>
+
+                  <div id="dashboard-health-legend" class="dashboard-health-legend" hidden></div>
+                  <div id="dashboard-alerts-list" class="dashboard-alerts-list" hidden></div>
+                  <strong id="dashboard-health-processed" class="dashboard-health-processed" hidden>0 of 0 processed</strong>
+                </section>
+              </div>
             </div>
+          </section>
+        </section>
 
-            <div class="dashboard-grid dashboard-grid-middle">
-              <aside class="card export-status-card" aria-label="Salesforce export status">
-                <div class="status-card-header">
-                  <h2 class="section-label">Export Status</h2>
-                  <div class="status-card-actions">
-                    <button id="reset-export-button" class="reset-link-button" type="button">Reset export</button>
-                    <button id="reset-all-button" class="reset-link-button reset-all-button" type="button">Reset all data</button>
-                  </div>
+        <section id="validation-view" class="app-view validation-view" hidden>
+          <section class="page-intro">
+            <h1>Compare</h1>
+            <p>Upload both datasets, confirm readiness, and run comparison from one workflow page.</p>
+          </section>
+
+          <section class="dashboard-stack dashboard-bento-stack">
+            <section class="card dashboard-bento-card validation-progress-panel" aria-label="Compare progress">
+              <div class="validation-progress-header">
+                <div class="validation-progress-copy">
+                  <p class="section-label">Workflow Progress</p>
+                  <h2>Complete the compare flow</h2>
+                  <p id="workflow-summary" class="supporting-text">Upload a Salesforce export and import RFI bulk data or enter rows in RFI Inputs to enable comparison. Results will open on the Results page.</p>
                 </div>
-
-                <div class="status-metric-grid">
-                  <div class="status-metric status-metric-selected-file">
-                    <span class="preview-metric-label">Selected File</span>
-                    <strong id="preview-file-name" class="status-metric-value truncated-metric-value">No file chosen</strong>
-                  </div>
-                  <div class="status-metric status-metric-file-type">
-                    <span class="preview-metric-label">File Type</span>
-                    <strong id="preview-file-type" class="status-metric-value">-</strong>
-                  </div>
-                  <div class="status-metric status-metric-ready-rfis">
-                    <span class="preview-metric-label">Ready RFI Entries</span>
-                    <strong id="preview-rfi-count" class="status-metric-value">0</strong>
-                  </div>
-                  <div class="status-metric status-metric-missing-fields">
-                    <span class="preview-metric-label">Missing Fields</span>
-                    <strong id="preview-missing-fields" class="status-metric-value">7</strong>
-                  </div>
-                  <div class="status-metric status-metric-table-rows">
-                    <span class="preview-metric-label">Table Rows</span>
-                    <strong id="preview-row-count" class="status-metric-value">0 / 0</strong>
-                  </div>
-                  <div class="status-metric status-metric-recognized-fields">
-                    <span class="preview-metric-label">Recognized Fields</span>
-                    <strong id="preview-recognized-fields" class="status-metric-value">0 / 7</strong>
-                  </div>
-                  <div class="status-metric status-metric-imported-rows">
-                    <span class="preview-metric-label">Imported Rows</span>
-                    <strong id="preview-record-count" class="status-metric-value">0</strong>
-                  </div>
-                  <div class="status-metric status-metric-status">
-                    <span class="preview-metric-label">Status</span>
-                    <strong id="preview-ready-state" class="validation-badge neutral-badge">Inactive</strong>
-                  </div>
+                <div class="validation-progress-actions">
+                  <button id="compare-button" class="primary-button validation-primary-button" disabled>Compare Results</button>
                 </div>
+              </div>
 
-                <p id="preview-diagnostics-note" class="preview-diagnostics-note">Upload a Salesforce export to review imported records before comparing.</p>
-              </aside>
+              <div class="validation-progress-bar" aria-hidden="true">
+                <span id="validation-progress-fill" class="validation-progress-fill"></span>
+              </div>
 
-              <section class="card comparison-action-card">
-                <div class="validation-action-bar">
-                  <div class="validation-action-copy">
-                    <h3>Run comparison</h3>
-                    <p id="workflow-summary" class="supporting-text">Upload a Salesforce export and import RFI bulk data or enter rows in RFI Inputs to enable comparison.</p>
+              <div class="validation-progress-steps">
+                <article id="validation-step-rfi" class="validation-progress-step is-active">
+                  <span class="validation-step-marker">1</span>
+                  <div class="validation-step-copy">
+                    <strong id="validation-step-rfi-title">Add RFI data</strong>
+                    <span id="validation-step-rfi-detail">Upload or enter at least one RFI row.</span>
                   </div>
-                  <div class="validation-action-buttons">
-                    <button id="compare-button" class="primary-button validation-primary-button" disabled>Compare Results</button>
-                    <button id="download-button" class="secondary-button validation-secondary-button" disabled>Download Results</button>
-                  </div>
-                </div>
-              </section>
-            </div>
+                </article>
 
-            <section class="results-section">
-              <section class="card results-card" id="results-card" tabindex="-1">
-                <div id="results-container"></div>
-              </section>
+                <article id="validation-step-salesforce" class="validation-progress-step">
+                  <span class="validation-step-marker">2</span>
+                  <div class="validation-step-copy">
+                    <strong id="validation-step-salesforce-title">Upload Salesforce export</strong>
+                    <span id="validation-step-salesforce-detail">Upload the current Salesforce CSV export.</span>
+                  </div>
+                </article>
+
+                <article id="validation-step-compare" class="validation-progress-step">
+                  <span class="validation-step-marker">3</span>
+                  <div class="validation-step-copy">
+                    <strong id="validation-step-compare-title">Run comparison</strong>
+                    <span id="validation-step-compare-detail">Comparison unlocks after both datasets are prepared.</span>
+                  </div>
+                </article>
+              </div>
             </section>
+
+            <section class="dashboard-setup-grid" aria-label="Setup workflow">
+              <article class="card dashboard-setup-card dashboard-setup-rfi-card">
+                <div class="dashboard-setup-copy">
+                  <p class="section-label">RFI Bulk Data</p>
+                  <h2>Upload RFI CSV</h2>
+                  <p class="supporting-text">Import RFI rows from a CSV, then refine them in the RFI Inputs workspace if needed.</p>
+                </div>
+                <div class="dashboard-setup-actions">
+                  <button id="dashboard-upload-rfi-button" class="primary-button dashboard-setup-button" type="button">Choose RFI CSV</button>
+                  <button id="dashboard-open-rfi-button" class="ghost-button dashboard-setup-secondary-button" type="button">Open RFI Inputs</button>
+                </div>
+              </article>
+
+              <article class="card dashboard-setup-card dashboard-setup-salesforce-card">
+                <div class="dashboard-setup-copy">
+                  <p class="section-label">Salesforce Export</p>
+                  <h2>Upload Salesforce CSV</h2>
+                  <p class="supporting-text">Load the latest Salesforce export, then inspect raw rows from the Salesforce Records workspace.</p>
+                </div>
+                <div class="dashboard-setup-actions">
+                  <button id="dashboard-upload-salesforce-button" class="primary-button dashboard-setup-button" type="button">Choose Export</button>
+                  <button id="dashboard-open-salesforce-button" class="ghost-button dashboard-setup-secondary-button" type="button">Open Salesforce Records</button>
+                </div>
+              </article>
+            </section>
+
+            <aside class="card export-status-card dashboard-bento-card dashboard-status-panel" aria-label="Salesforce export status">
+              <div class="status-card-header">
+                <h2 class="section-label">Export Status</h2>
+                <div class="status-card-actions">
+                  <button id="reset-export-button" class="reset-link-button" type="button">Reset export</button>
+                  <button id="reset-all-button" class="reset-link-button reset-all-button" type="button">Reset all data</button>
+                </div>
+              </div>
+
+              <div class="status-metric-grid">
+                <div class="status-metric status-metric-selected-file">
+                  <span class="preview-metric-label">Selected File</span>
+                  <strong id="preview-file-name" class="status-metric-value truncated-metric-value">No file chosen</strong>
+                </div>
+                <div class="status-metric status-metric-file-type">
+                  <span class="preview-metric-label">File Type</span>
+                  <strong id="preview-file-type" class="status-metric-value">-</strong>
+                </div>
+                <div class="status-metric status-metric-ready-rfis">
+                  <span class="preview-metric-label">Ready RFI Entries</span>
+                  <strong id="preview-rfi-count" class="status-metric-value">0</strong>
+                </div>
+                <div class="status-metric status-metric-missing-fields">
+                  <span class="preview-metric-label">Missing Fields</span>
+                  <strong id="preview-missing-fields" class="status-metric-value">7</strong>
+                </div>
+                <div class="status-metric status-metric-table-rows">
+                  <span class="preview-metric-label">Table Rows</span>
+                  <strong id="preview-row-count" class="status-metric-value">0 / 0</strong>
+                </div>
+                <div class="status-metric status-metric-recognized-fields">
+                  <span class="preview-metric-label">Recognized Fields</span>
+                  <strong id="preview-recognized-fields" class="status-metric-value">0 / 7</strong>
+                </div>
+                <div class="status-metric status-metric-imported-rows">
+                  <span class="preview-metric-label">Imported Rows</span>
+                  <strong id="preview-record-count" class="status-metric-value">0</strong>
+                </div>
+                <div class="status-metric status-metric-status">
+                  <span class="preview-metric-label">Status</span>
+                  <strong id="preview-ready-state" class="validation-badge neutral-badge">Inactive</strong>
+                </div>
+              </div>
+
+              <p id="preview-diagnostics-note" class="preview-diagnostics-note">Upload a Salesforce export to review imported records before comparing.</p>
+            </aside>
           </section>
         </section>
 
         <section id="rfi-inputs-view" class="app-view rfi-inputs-view" hidden>
-          <section class="page-intro">
-            <h1>RFI Inputs</h1>
-            <p>Build and manage the manual RFI submission table used in comparison.</p>
+          <section class="page-intro page-intro-with-toolbar">
+            <div class="page-intro-copy">
+              <h1>RFI Inputs</h1>
+              <p>Import CSV rows and manage the RFI submission table used in comparison.</p>
+            </div>
+
+            <div class="inline-upload-toolbar">
+              <input class="file-input-hidden" type="file" id="rfi-csv-input" accept=".csv,text/csv" />
+              <label class="inline-upload-control" for="rfi-csv-input">
+                <span class="inline-upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm1 7V5.5L18.5 9H16a1 1 0 0 1-1-1ZM8 14.5l2.6-2.6 1.8 1.8 2.6-2.6L18 14.1V17H8v-2.5Zm4.75-3.25 1.5 1.5V10h2l-4-4-4 4h2v4.75l1.5-1.5Z" fill="currentColor" />
+                  </svg>
+                </span>
+                <span class="inline-upload-copy">
+                  <span class="inline-upload-label">Upload RFI CSV</span>
+                  <span class="inline-upload-subcopy">CSV format only</span>
+                </span>
+                <span class="inline-upload-divider" aria-hidden="true"></span>
+                <span class="inline-upload-button">+ Choose File</span>
+              </label>
+              <div class="inline-upload-meta">
+                <a
+                  class="inline-upload-link"
+                  href="sample_rfi-entered_timestamp.csv"
+                  download="sample_rfi-entered_timestamp.csv"
+                >
+                  <span class="download-action-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                      <path d="M12 3a1 1 0 0 1 1 1v8.59l2.3-2.29a1 1 0 1 1 1.4 1.41l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.41L11 12.59V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z" fill="currentColor" />
+                    </svg>
+                  </span>
+                  Download Sample CSV
+                </a>
+                <div id="rfi-import-status" class="status rfi-import-status inline-upload-status">Import CSV rows here and refine them in the table below.</div>
+              </div>
+            </div>
           </section>
 
           <section class="card submission-card">
@@ -371,7 +596,7 @@
 
         <section id="test-data-generator-view" class="app-view generator-view" hidden>
           <section class="page-intro">
-            <h1>Test Data Generator</h1>
+            <h1>Data Generator</h1>
             <p>Configure and generate synthetic data with custom logic.</p>
           </section>
 
@@ -596,20 +821,99 @@
         </section>
 
         <section id="salesforce-records-view" class="app-view salesforce-records-view" hidden>
-          <section class="page-intro">
-            <h1>Salesforce Records</h1>
-            <p>Inspect the imported Salesforce export, search across detected columns, and review the full record grid.</p>
+          <section class="page-intro page-intro-with-toolbar">
+            <div class="page-intro-copy">
+              <h1>Salesforce Records</h1>
+              <p>Search across detected columns and review the full record grid.</p>
+            </div>
+
+            <div class="inline-upload-toolbar">
+              <input class="file-input-hidden" type="file" id="file-input" accept=".csv,text/csv" />
+              <label class="inline-upload-control" for="file-input">
+                <span class="inline-upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm1 7V5.5L18.5 9H16a1 1 0 0 1-1-1ZM8 14.5l2.6-2.6 1.8 1.8 2.6-2.6L18 14.1V17H8v-2.5Zm4.75-3.25 1.5 1.5V10h2l-4-4-4 4h2v4.75l1.5-1.5Z" fill="currentColor" />
+                  </svg>
+                </span>
+                <span class="inline-upload-copy">
+                  <span class="inline-upload-label">Upload Export</span>
+                  <span class="inline-upload-subcopy">CSV format only</span>
+                </span>
+                <span class="inline-upload-divider" aria-hidden="true"></span>
+                <span class="inline-upload-button">+ Choose File</span>
+              </label>
+              <div id="status" class="status export-status inline-upload-status"></div>
+            </div>
           </section>
 
-          <section class="card records-view-card">
-            <div class="records-view-header">
-              <div>
-                <p class="section-label">Raw Data</p>
-                <h2>Imported Salesforce Records</h2>
-                <p class="supporting-text">This view mirrors the latest uploaded export and keeps the raw rows available in a dedicated workspace.</p>
+          <section class="salesforce-records-stack">
+            <section class="card records-view-card">
+              <div class="records-view-header">
+                <div>
+                  <p class="section-label">Raw Data</p>
+                  <h2>Imported Salesforce Records</h2>
+                  <p class="supporting-text">This view mirrors the latest uploaded export and keeps the raw rows available in a dedicated workspace.</p>
+                </div>
               </div>
+              <div id="salesforce-records-container" class="preview-body-container"></div>
+            </section>
+          </section>
+        </section>
+
+        <section id="results-view" class="app-view results-view" hidden>
+          <section class="page-intro page-intro-with-toolbar">
+            <div class="page-intro-copy">
+              <h1>Results</h1>
+              <p>Review comparison outcomes and switch between the matched results, RFI inputs, and Salesforce records in one workspace.</p>
             </div>
-            <div id="salesforce-records-container" class="preview-body-container"></div>
+
+            <div class="page-intro-actions">
+              <button id="download-button" class="secondary-button results-download-button" disabled>Download Results</button>
+            </div>
+          </section>
+
+          <section class="results-workspace-shell">
+            <div class="results-workspace-tabs" role="tablist" aria-label="Results workspace sections">
+              <button id="results-workspace-tab-results" class="results-workspace-tab active" type="button" role="tab" aria-selected="true" aria-controls="results-workspace-panel-results" data-results-workspace-tab="results">Results</button>
+              <button id="results-workspace-tab-rfi" class="results-workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="results-workspace-panel-rfi" data-results-workspace-tab="rfi">RFI Inputs</button>
+              <button id="results-workspace-tab-salesforce" class="results-workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="results-workspace-panel-salesforce" data-results-workspace-tab="salesforce">Salesforce Records</button>
+            </div>
+
+            <section id="results-workspace-panel-results" class="results-workspace-panel active" role="tabpanel" aria-labelledby="results-workspace-tab-results">
+              <section class="results-section results-view-section">
+                <section class="card results-card" id="results-card" tabindex="-1">
+                  <div id="results-container"></div>
+                </section>
+              </section>
+            </section>
+
+            <section id="results-workspace-panel-rfi" class="results-workspace-panel" role="tabpanel" aria-labelledby="results-workspace-tab-rfi" hidden>
+              <section class="card results-workspace-card">
+                <div class="results-workspace-card-header">
+                  <div>
+                    <p class="section-label">RFI Inputs</p>
+                    <h2>Current RFI Submission Table</h2>
+                    <p class="supporting-text">Reference the latest RFI rows used for comparison. Use the full RFI Inputs page if you need to edit entries.</p>
+                  </div>
+                  <button id="results-open-rfi-page-button" class="ghost-button results-workspace-link-button" type="button">Open full RFI Inputs</button>
+                </div>
+                <div id="results-rfi-container" class="results-workspace-body"></div>
+              </section>
+            </section>
+
+            <section id="results-workspace-panel-salesforce" class="results-workspace-panel" role="tabpanel" aria-labelledby="results-workspace-tab-salesforce" hidden>
+              <section class="card results-workspace-card">
+                <div class="results-workspace-card-header">
+                  <div>
+                    <p class="section-label">Salesforce Records</p>
+                    <h2>Imported Salesforce Record Grid</h2>
+                    <p class="supporting-text">Review the current imported Salesforce dataset without leaving the Results workspace.</p>
+                  </div>
+                  <button id="results-open-salesforce-page-button" class="ghost-button results-workspace-link-button" type="button">Open full Salesforce Records</button>
+                </div>
+                <div id="results-salesforce-container" class="preview-body-container results-workspace-body"></div>
+              </section>
+            </section>
           </section>
         </section>
 
@@ -643,9 +947,9 @@
                   <input id="profile-avatar" type="text" placeholder="Optional initials" />
                 </label>
                 <label class="profile-field">
-                  <span class="generator-field-label">Test Data Generator Identifier</span>
+                  <span class="generator-field-label">Data Generator Identifier</span>
                   <input id="profile-identifier" type="text" placeholder="Optional identifier" />
-                  <span class="profile-helper">Used as the default identifier in the Test Data Generator.</span>
+                  <span class="profile-helper">Used as the default identifier in the Data Generator.</span>
                 </label>
                 <div class="profile-actions">
                   <button id="profile-save-button" class="primary-button profile-save-button" type="button" disabled>Save Profile</button>
@@ -685,6 +989,8 @@
       <td><input type="url" data-field="ASUO Origin URL" placeholder="eg..https://asuonline.asu.edu/" /></td>
       <td>
         <div class="row-action-group">
+          <button class="secondary-button row-action-button save-submission-button" type="button" hidden>Save</button>
+          <button class="ghost-button row-action-button cancel-submission-button" type="button" hidden>Cancel</button>
           <button class="ghost-button icon-button duplicate-submission-button" type="button" aria-label="Duplicate submission" title="Duplicate submission">
             <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 9h11v11H9V9Zm-5-5h11v2H6v9H4V4Z" fill="currentColor" />

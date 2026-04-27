@@ -39,13 +39,25 @@ async function createSingleRfiCsvFixture(filePath) {
 }
 
 async function openRfiInputs(page) {
-  await page.locator('#nav-rfi-inputs').click();
+  await openValidation(page);
+  await page.locator('#dashboard-open-rfi-button').click();
   await expect(page.locator('#rfi-inputs-view')).toBeVisible();
 }
 
-async function openDashboard(page) {
-  await page.locator('#nav-dashboard').click();
-  await expect(page.locator('#dashboard-view')).toBeVisible();
+async function openValidation(page) {
+  await page.locator('#nav-validation').click();
+  await expect(page.locator('#validation-view')).toBeVisible();
+}
+
+async function openSalesforceRecords(page) {
+  await openValidation(page);
+  await page.locator('#dashboard-open-salesforce-button').click();
+  await expect(page.locator('#salesforce-records-view')).toBeVisible();
+}
+
+async function openResults(page) {
+  await page.locator('#nav-results').click();
+  await expect(page.locator('#results-view')).toBeVisible();
 }
 
 async function openGenerator(page) {
@@ -77,17 +89,27 @@ test('browser workflow supports upload, comparison, and download', async ({ page
     originUrl: 'https://qa.asuonline.asu.edu/'
   });
 
-  await openDashboard(page);
+  await openSalesforceRecords(page);
   await page.locator('#file-input').setInputFiles(csvPath);
 
   await expect(page.locator('#status')).toContainText('Loaded 2 Salesforce record(s). Ready to compare.');
+  await openValidation(page);
   await expect(page.locator('#compare-button')).toBeEnabled();
 
   const downloadPromise = page.waitForEvent('download');
 
   await page.locator('#compare-button').click();
+  await expect(page.locator('#results-view')).toBeVisible();
   await expect(page.locator('#results-container')).toContainText('Exact match');
   await expect(page.locator('#results-container')).toContainText('embtestbikalrfivalidation@asu.edu');
+
+  await page.locator('#results-workspace-tab-rfi').click();
+  await expect(page.locator('#results-rfi-container')).toContainText('Embtest');
+
+  await page.locator('#results-workspace-tab-salesforce').click();
+  await expect(page.locator('#results-salesforce-container')).toContainText('embtestbikalrfivalidation@asu.edu');
+
+  await page.locator('#results-workspace-tab-results').click();
   await expect(page.locator('#download-button')).toBeEnabled();
 
   await page.locator('#download-button').click();
@@ -107,7 +129,7 @@ test('Salesforce-only upload keeps compare disabled until an RFI row is provided
   await createSalesforceCsvFixture(csvPath);
 
   await page.goto('/');
-  await openDashboard(page);
+  await openSalesforceRecords(page);
   await page.locator('#file-input').setInputFiles(csvPath);
 
   await expect(page.locator('#status')).toContainText('Add at least one RFI submission to enable comparison.');
@@ -129,9 +151,11 @@ test('notification bell shows recent comparison activity', async ({ page }, test
     originUrl: 'https://qa.asuonline.asu.edu/'
   });
 
-  await openDashboard(page);
+  await openSalesforceRecords(page);
   await page.locator('#file-input').setInputFiles(csvPath);
+  await openValidation(page);
   await page.locator('#compare-button').click();
+  await expect(page.locator('#results-view')).toBeVisible();
 
   await expect(page.locator('#notifications-badge')).toHaveText('1');
   await page.locator('#notifications-button').click();
@@ -166,10 +190,10 @@ test('importing one RFI CSV row reuses the initial blank submission row', async 
   await createSingleRfiCsvFixture(csvPath);
 
   await page.goto('/');
+  await openRfiInputs(page);
   await page.locator('#rfi-csv-input').setInputFiles(csvPath);
   await expect(page.locator('#rfi-import-status')).toContainText('Imported 1 RFI row');
 
-  await openRfiInputs(page);
   const submissionRows = page.locator('#rfi-submissions .submission-row');
   await expect(submissionRows).toHaveCount(1);
   await expect(submissionRows.first().locator('input[data-field="First Name"]')).toHaveValue('Taylor');
@@ -181,25 +205,25 @@ test('browser workflow rejects Salesforce uploads over the 500-row limit', async
   await createOversizedSalesforceCsvFixture(csvPath);
 
   await page.goto('/');
+  await openSalesforceRecords(page);
   await page.locator('#file-input').setInputFiles(csvPath);
 
   await expect(page.locator('#status')).toContainText('exceeds the 500-row limit');
   await expect(page.locator('#compare-button')).toBeDisabled();
 
-  await page.locator('#nav-salesforce-records').click();
   await expect(page.locator('#salesforce-records-container')).toContainText('Unable to display imported records from that file.');
 });
 
-test('dashboard RFI CSV import rejects files over the 500-row limit', async ({ page }, testInfo) => {
+test('RFI CSV import rejects files over the 500-row limit', async ({ page }, testInfo) => {
   const csvPath = testInfo.outputPath('oversized-rfi.csv');
   await createOversizedRfiCsvFixture(csvPath);
 
   await page.goto('/');
+  await openRfiInputs(page);
   await page.locator('#rfi-csv-input').setInputFiles(csvPath);
 
   await expect(page.locator('#rfi-import-status')).toContainText('exceeds the 500-row limit');
 
-  await openRfiInputs(page);
   await expect(page.locator('#rfi-submissions .submission-row')).toHaveCount(1);
   await expect(page.locator('#rfi-submissions .submission-row').first().locator('input[data-field="First Name"]')).toHaveValue('');
 });
@@ -208,7 +232,7 @@ test('test data generator view can generate and download a synthetic record', as
   await page.goto('/');
   await openGenerator(page);
 
-  await expect(page.locator('#test-data-generator-view h1')).toContainText('Test Data Generator');
+  await expect(page.locator('#test-data-generator-view h1')).toContainText('Data Generator');
   await expect(page.locator('#generator-generate-button')).toBeVisible();
 
   await page.locator('#generator-generate-button').click();
@@ -264,16 +288,18 @@ test('injecting generated test data clears stale comparison results', async ({ p
     originUrl: 'https://qa.asuonline.asu.edu/'
   });
 
-  await openDashboard(page);
+  await openSalesforceRecords(page);
   await page.locator('#file-input').setInputFiles(csvPath);
+  await openValidation(page);
   await page.locator('#compare-button').click();
+  await expect(page.locator('#results-view')).toBeVisible();
   await expect(page.locator('#download-button')).toBeEnabled();
 
   await openGenerator(page);
   await page.locator('#generator-generate-button').click();
   await page.locator('#generator-inject-button').click();
 
-  await openDashboard(page);
+  await openResults(page);
   await expect(page.locator('#download-button')).toBeDisabled();
   await expect(page.locator('#status')).toContainText('Compare again when ready.');
 });

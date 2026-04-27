@@ -3,11 +3,26 @@ const compareButton = document.getElementById('compare-button');
 const downloadButton = document.getElementById('download-button');
 const resetExportButton = document.getElementById('reset-export-button');
 const resetAllButton = document.getElementById('reset-all-button');
+const dashboardUploadRfiButton = document.getElementById('dashboard-upload-rfi-button');
+const dashboardOpenRfiButton = document.getElementById('dashboard-open-rfi-button');
+const dashboardUploadSalesforceButton = document.getElementById('dashboard-upload-salesforce-button');
+const dashboardOpenSalesforceButton = document.getElementById('dashboard-open-salesforce-button');
 const appearanceButton = document.getElementById('appearance-button');
 const appearancePanel = document.getElementById('appearance-panel');
 const appearanceOptions = Array.from(document.querySelectorAll('[data-theme-option]'));
 const dashboardView = document.getElementById('dashboard-view');
+const dashboardPageTitleEl = document.getElementById('dashboard-page-title');
+const dashboardPageSubtitleEl = document.getElementById('dashboard-page-subtitle');
+const dashboardEmptyStateEl = document.getElementById('dashboard-empty-state');
+const dashboardEmptyStartButton = document.getElementById('dashboard-empty-start-button');
+const validationView = document.getElementById('validation-view');
 const rfiInputsView = document.getElementById('rfi-inputs-view');
+const resultsView = document.getElementById('results-view');
+const resultsWorkspaceTabButtons = Array.from(document.querySelectorAll('.results-workspace-tab'));
+const resultsRfiContainer = document.getElementById('results-rfi-container');
+const resultsSalesforceContainer = document.getElementById('results-salesforce-container');
+const resultsOpenRfiPageButton = document.getElementById('results-open-rfi-page-button');
+const resultsOpenSalesforcePageButton = document.getElementById('results-open-salesforce-page-button');
 const testDataGeneratorView = document.getElementById('test-data-generator-view');
 const historyView = document.getElementById('history-view');
 const salesforceRecordsView = document.getElementById('salesforce-records-view');
@@ -55,6 +70,16 @@ const generatorResultsDescription = document.getElementById('generator-results-d
 const previewPanel = document.getElementById('preview-panel');
 const previewToggleLabelEl = document.getElementById('preview-toggle-label');
 const workflowSummaryEl = document.getElementById('workflow-summary');
+const validationProgressFillEl = document.getElementById('validation-progress-fill');
+const validationStepRfiEl = document.getElementById('validation-step-rfi');
+const validationStepSalesforceEl = document.getElementById('validation-step-salesforce');
+const validationStepCompareEl = document.getElementById('validation-step-compare');
+const validationStepRfiTitleEl = document.getElementById('validation-step-rfi-title');
+const validationStepSalesforceTitleEl = document.getElementById('validation-step-salesforce-title');
+const validationStepCompareTitleEl = document.getElementById('validation-step-compare-title');
+const validationStepRfiDetailEl = document.getElementById('validation-step-rfi-detail');
+const validationStepSalesforceDetailEl = document.getElementById('validation-step-salesforce-detail');
+const validationStepCompareDetailEl = document.getElementById('validation-step-compare-detail');
 const previewFileNameEl = document.getElementById('preview-file-name');
 const previewFileTypeEl = document.getElementById('preview-file-type');
 const previewRecordCountEl = document.getElementById('preview-record-count');
@@ -64,6 +89,32 @@ const previewMissingFieldsEl = document.getElementById('preview-missing-fields')
 const previewRowCountEl = document.getElementById('preview-row-count');
 const previewReadyStateEl = document.getElementById('preview-ready-state');
 const previewDiagnosticsNoteEl = document.getElementById('preview-diagnostics-note');
+const dashboardChartTitleEl = document.getElementById('dashboard-chart-title');
+const dashboardChartModeEl = document.getElementById('dashboard-chart-mode');
+const dashboardChartRingEl = document.getElementById('dashboard-chart-ring');
+const dashboardChartValueEl = document.getElementById('dashboard-chart-value');
+const dashboardChartValueLabelEl = document.getElementById('dashboard-chart-value-label');
+const dashboardChartLegendEl = document.getElementById('dashboard-chart-legend');
+const dashboardChartCaptionEl = document.getElementById('dashboard-chart-caption');
+const dashboardAnalyticsContentEl = document.getElementById('dashboard-analytics-content');
+const dashboardStatSubmissionsEl = document.getElementById('dashboard-stat-submissions');
+const dashboardStatSubmissionsCopyEl = document.getElementById('dashboard-stat-submissions-copy');
+const dashboardStatSalesforceEl = document.getElementById('dashboard-stat-salesforce');
+const dashboardStatSalesforceCopyEl = document.getElementById('dashboard-stat-salesforce-copy');
+const dashboardStatExactEl = document.getElementById('dashboard-stat-exact');
+const dashboardStatExactCopyEl = document.getElementById('dashboard-stat-exact-copy');
+const dashboardStatNoMatchEl = document.getElementById('dashboard-stat-no-match');
+const dashboardStatNoMatchCopyEl = document.getElementById('dashboard-stat-no-match-copy');
+const dashboardFieldBarsEl = document.getElementById('dashboard-field-bars');
+const dashboardHealthExactSegmentEl = document.getElementById('dashboard-health-exact-segment');
+const dashboardHealthPartialSegmentEl = document.getElementById('dashboard-health-partial-segment');
+const dashboardHealthNoMatchSegmentEl = document.getElementById('dashboard-health-no-match-segment');
+const dashboardHealthLegendEl = document.getElementById('dashboard-health-legend');
+const dashboardHealthProcessedEl = document.getElementById('dashboard-health-processed');
+const dashboardAlertsListEl = document.getElementById('dashboard-alerts-list');
+const dashboardRunFooterEl = document.getElementById('dashboard-run-footer');
+const dashboardRunBadgeEl = document.getElementById('dashboard-run-badge');
+const sidebarNav = document.querySelector('.sidebar-nav');
 const topbarViewLinks = Array.from(document.querySelectorAll('.topbar-link[data-view]'));
 const notificationsButton = document.getElementById('notifications-button');
 const notificationsPanel = document.getElementById('notifications-panel');
@@ -82,9 +133,17 @@ const profileSaveStatusEl = document.getElementById('profile-save-status');
 const profilePreviewNameEl = document.getElementById('profile-preview-name');
 const profilePreviewRoleEl = document.getElementById('profile-preview-role');
 const profilePreviewAvatarEl = document.getElementById('profile-preview-avatar');
-const previewBodyContainers = [previewContainer, salesforceRecordsContainer].filter(Boolean);
+const previewBodyContainers = [previewContainer, salesforceRecordsContainer, resultsSalesforceContainer].filter(Boolean);
 const THEME_STORAGE_KEY = 'rfi-validator-theme';
 const PROFILE_STORAGE_KEY = 'rfi-validator-profile';
+const DASHBOARD_STATUS_COLOR_FALLBACKS = Object.freeze({
+  setup: '#3560d3',
+  track: '#e7edf8',
+  exact: '#16a34a',
+  partial: '#d97706',
+  noMatch: '#ef4444',
+  warning: '#c45a52'
+});
 
 let parsedRecords = [];
 let comparisonResults = [];
@@ -97,11 +156,13 @@ let currentPreviewStatus = 'Inactive';
 let fileDiagnostics;
 let previewSearchQuery = '';
 let resultsSearchQuery = '';
+let resultsRfiSearchQuery = '';
 let lastGeneratedTestData = null;
 let lastGeneratedBatchData = [];
 let generatorBatchCount = 1;
 let activeProfile = null;
 let draftProfile = null;
+let activeResultsWorkspaceTab = 'results';
 const EXPORT_ROW_LIMIT = 500;
 const RFI_ROW_LIMIT = 500;
 
@@ -383,9 +444,9 @@ function downloadBatchTestData(records) {
 
 function getStoredTheme() {
   try {
-    return localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+    return localStorage.getItem(THEME_STORAGE_KEY) || 'asu';
   } catch (error) {
-    return 'light';
+    return 'asu';
   }
 }
 
@@ -395,17 +456,33 @@ function setAppearancePanelOpen(isOpen) {
   appearanceButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
+function getActiveAppearanceOption() {
+  return appearanceOptions.find((option) => option.getAttribute('aria-checked') === 'true') || appearanceOptions[0] || null;
+}
+
+function syncAppearanceOptionTabStops(activeOption = getActiveAppearanceOption()) {
+  appearanceOptions.forEach((option) => {
+    option.tabIndex = option === activeOption ? 0 : -1;
+  });
+}
+
 function syncThemeOptions(theme) {
+  let activeOption = null;
   appearanceOptions.forEach((option) => {
     const active = option.dataset.themeOption === theme;
     option.classList.toggle('active', active);
     option.setAttribute('aria-checked', active ? 'true' : 'false');
+    if (active) {
+      activeOption = option;
+    }
   });
+
+  syncAppearanceOptionTabStops(activeOption);
 }
 
 function applyTheme(theme) {
   const requestedTheme = theme === 'funky' ? 'asu' : theme;
-  const nextTheme = ['light', 'dark', 'retro', 'vintage', 'asu'].includes(requestedTheme) ? requestedTheme : 'light';
+  const nextTheme = ['light', 'dark', 'retro', 'vintage', 'asu'].includes(requestedTheme) ? requestedTheme : 'asu';
   document.body.dataset.theme = nextTheme;
   syncThemeOptions(nextTheme);
 
@@ -413,6 +490,130 @@ function applyTheme(theme) {
     localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
   } catch (error) {
     // Ignore storage failures and keep the in-memory theme.
+  }
+
+  updateDashboardChart();
+}
+
+function readThemeColorVariable(name, fallback) {
+  const value = getComputedStyle(document.body).getPropertyValue(name).trim();
+  return value || fallback;
+}
+
+function getDashboardStatusColors() {
+  return {
+    setup: readThemeColorVariable('--dashboard-status-setup', DASHBOARD_STATUS_COLOR_FALLBACKS.setup),
+    track: readThemeColorVariable('--dashboard-status-track', DASHBOARD_STATUS_COLOR_FALLBACKS.track),
+    exact: readThemeColorVariable('--dashboard-status-exact', DASHBOARD_STATUS_COLOR_FALLBACKS.exact),
+    partial: readThemeColorVariable('--dashboard-status-partial', DASHBOARD_STATUS_COLOR_FALLBACKS.partial),
+    noMatch: readThemeColorVariable('--dashboard-status-no-match', DASHBOARD_STATUS_COLOR_FALLBACKS.noMatch),
+    warning: readThemeColorVariable('--dashboard-status-warning', DASHBOARD_STATUS_COLOR_FALLBACKS.warning)
+  };
+}
+
+function focusElement(element) {
+  element?.focus({ preventScroll: true });
+}
+
+function getSidebarNavigationItems() {
+  return [...topbarViewLinks, appearanceButton].filter(Boolean);
+}
+
+function moveSidebarNavigationFocus(currentItem, offset) {
+  const items = getSidebarNavigationItems();
+  const currentIndex = items.indexOf(currentItem);
+  if (!items.length || currentIndex === -1) return;
+
+  const nextIndex = (currentIndex + offset + items.length) % items.length;
+  focusElement(items[nextIndex]);
+}
+
+function focusSidebarBoundaryItem(index) {
+  const items = getSidebarNavigationItems();
+  if (!items.length) return;
+  focusElement(items[index]);
+}
+
+function handleSidebarNavigationKeydown(event) {
+  const currentItem = event.target.closest('.sidebar-link, .sidebar-appearance-button');
+  if (!currentItem) return;
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    moveSidebarNavigationFocus(currentItem, 1);
+    return;
+  }
+
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    moveSidebarNavigationFocus(currentItem, -1);
+    return;
+  }
+
+  if (event.key === 'Home') {
+    event.preventDefault();
+    focusSidebarBoundaryItem(0);
+    return;
+  }
+
+  if (event.key === 'End') {
+    event.preventDefault();
+    focusSidebarBoundaryItem(getSidebarNavigationItems().length - 1);
+  }
+}
+
+function focusAppearanceOption(option) {
+  focusElement(option);
+}
+
+function moveAppearanceOptionSelection(currentOption, offset) {
+  const currentIndex = appearanceOptions.indexOf(currentOption);
+  if (!appearanceOptions.length || currentIndex === -1) return;
+
+  const nextIndex = (currentIndex + offset + appearanceOptions.length) % appearanceOptions.length;
+  const nextOption = appearanceOptions[nextIndex];
+  applyTheme(nextOption.dataset.themeOption);
+  focusAppearanceOption(nextOption);
+}
+
+function selectAppearanceBoundaryOption(index) {
+  const option = appearanceOptions[index];
+  if (!option) return;
+  applyTheme(option.dataset.themeOption);
+  focusAppearanceOption(option);
+}
+
+function handleAppearanceOptionKeydown(event) {
+  const currentOption = event.currentTarget;
+
+  if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+    event.preventDefault();
+    moveAppearanceOptionSelection(currentOption, 1);
+    return;
+  }
+
+  if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+    event.preventDefault();
+    moveAppearanceOptionSelection(currentOption, -1);
+    return;
+  }
+
+  if (event.key === 'Home') {
+    event.preventDefault();
+    selectAppearanceBoundaryOption(0);
+    return;
+  }
+
+  if (event.key === 'End') {
+    event.preventDefault();
+    selectAppearanceBoundaryOption(appearanceOptions.length - 1);
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    setAppearancePanelOpen(false);
+    focusElement(appearanceButton);
   }
 }
 
@@ -481,6 +682,102 @@ function getInputValueForField(field, input) {
   return input.value || '';
 }
 
+function normalizeSubmissionValues(values = {}) {
+  return expectedFields.reduce((normalizedValues, field) => {
+    if (field === 'Military Service') {
+      normalizedValues[field] = normalizeMilitaryStatus(values[field]) === 'true' ? 'true' : '';
+      return normalizedValues;
+    }
+
+    if (field === 'Created Date') {
+      normalizedValues[field] = normalizeCreatedDateInputValue(values[field]);
+      return normalizedValues;
+    }
+
+    normalizedValues[field] = String(values[field] || '');
+    return normalizedValues;
+  }, {});
+}
+
+function applySubmissionValuesToCard(card, values = {}) {
+  const normalizedValues = normalizeSubmissionValues(values);
+
+  expectedFields.forEach((field) => {
+    const input = card.querySelector(`[data-field="${field}"]`);
+    if (!input) return;
+
+    if (field === 'Military Service') {
+      input.checked = normalizedValues[field] === 'true';
+      return;
+    }
+
+    input.value = normalizedValues[field];
+  });
+
+  return normalizedValues;
+}
+
+function submissionValuesMatch(left, right) {
+  return expectedFields.every((field) => String(left?.[field] || '') === String(right?.[field] || ''));
+}
+
+function requiresExplicitSubmissionSave(card) {
+  return card?.dataset.requiresExplicitSave === 'true';
+}
+
+function setSavedSubmissionValues(card, values = {}) {
+  card.dataset.savedValues = JSON.stringify(normalizeSubmissionValues(values));
+}
+
+function getSavedSubmissionValues(card) {
+  if (!card?.dataset.savedValues) return normalizeSubmissionValues(getSubmissionValues(card));
+
+  try {
+    return normalizeSubmissionValues(JSON.parse(card.dataset.savedValues));
+  } catch (error) {
+    return normalizeSubmissionValues(getSubmissionValues(card));
+  }
+}
+
+function getCommittedSubmissionValues(card) {
+  return requiresExplicitSubmissionSave(card)
+    ? getSavedSubmissionValues(card)
+    : normalizeSubmissionValues(getSubmissionValues(card));
+}
+
+function setSubmissionDirtyState(card, isDirty) {
+  card.dataset.pendingSave = isDirty ? 'true' : 'false';
+  card.classList.toggle('submission-row-pending-save', isDirty);
+
+  const saveButton = card.querySelector('.save-submission-button');
+  const cancelButton = card.querySelector('.cancel-submission-button');
+  const duplicateButton = card.querySelector('.duplicate-submission-button');
+
+  if (saveButton) saveButton.hidden = !isDirty;
+  if (cancelButton) cancelButton.hidden = !isDirty;
+  if (duplicateButton) duplicateButton.disabled = isDirty;
+}
+
+function syncSubmissionDraftState(card) {
+  const wasDirty = card?.dataset.pendingSave === 'true';
+  if (!requiresExplicitSubmissionSave(card)) {
+    setSubmissionDirtyState(card, false);
+    return { wasDirty, isDirty: false };
+  }
+
+  const isDirty = !submissionValuesMatch(getSubmissionValues(card), getSavedSubmissionValues(card));
+  setSubmissionDirtyState(card, isDirty);
+  return { wasDirty, isDirty };
+}
+
+function getPendingPreloadedEditCount() {
+  return getSubmissionCards().filter((card) => card.dataset.pendingSave === 'true').length;
+}
+
+function hasPendingPreloadedEdits() {
+  return getPendingPreloadedEditCount() > 0;
+}
+
 function validateRfiRowLimit(nextRowCount) {
   if (nextRowCount > RFI_ROW_LIMIT) {
     throw new Error(`The RFI table contains ${nextRowCount} row(s), which exceeds the ${RFI_ROW_LIMIT}-row limit.`);
@@ -500,12 +797,59 @@ function setPreviewValidationState(label, toneClass) {
   previewReadyStateEl.className = `validation-badge ${toneClass}`;
 }
 
+function getComparisonSetupState() {
+  const meaningfulRfiCount = getMeaningfulRfiCount();
+  const hasRfi = meaningfulRfiCount > 0;
+  const hasExport = parsedRecords.length > 0;
+  const recognizedFieldCount = hasExport ? fileDiagnostics.recognizedFields : 0;
+  const missingFieldCount = hasExport ? fileDiagnostics.missingFields.length : expectedFields.length;
+
+  return {
+    meaningfulRfiCount,
+    hasRfi,
+    hasExport,
+    recognizedFieldCount,
+    missingFieldCount,
+    comparisonReady: hasRfi && hasExport
+  };
+}
+
+function setResultsWorkspaceTab(tab) {
+  const nextTab = ['results', 'rfi', 'salesforce'].includes(tab) ? tab : 'results';
+  activeResultsWorkspaceTab = nextTab;
+
+  resultsWorkspaceTabButtons.forEach((button) => {
+    const active = button.dataset.resultsWorkspaceTab === nextTab;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+
+  [
+    { id: 'results-workspace-panel-results', tab: 'results' },
+    { id: 'results-workspace-panel-rfi', tab: 'rfi' },
+    { id: 'results-workspace-panel-salesforce', tab: 'salesforce' }
+  ].forEach((panelConfig) => {
+    const panel = document.getElementById(panelConfig.id);
+    if (!panel) return;
+
+    const active = panelConfig.tab === nextTab;
+    panel.hidden = !active;
+    panel.classList.toggle('active', active);
+  });
+}
+
 function setAppView(view) {
-  const nextView = ['dashboard', 'rfi-inputs', 'salesforce-records', 'test-data-generator', 'history', 'profile'].includes(view)
+  const nextView = ['dashboard', 'validation', 'rfi-inputs', 'salesforce-records', 'results', 'test-data-generator', 'history', 'profile'].includes(view)
     ? view
     : 'dashboard';
   dashboardView.hidden = nextView !== 'dashboard';
+  if (validationView) {
+    validationView.hidden = nextView !== 'validation';
+  }
   rfiInputsView.hidden = nextView !== 'rfi-inputs';
+  if (resultsView) {
+    resultsView.hidden = nextView !== 'results';
+  }
   if (testDataGeneratorView) {
     testDataGeneratorView.hidden = nextView !== 'test-data-generator';
   }
@@ -767,7 +1111,8 @@ function openHistoryEntry(entry, statusMessage = `Opened history entry from ${en
   downloadButton.disabled = false;
   statusEl.textContent = statusMessage;
   setNotificationsPanelOpen(false);
-  setAppView('dashboard');
+  setResultsWorkspaceTab('results');
+  setAppView('results');
   resultsCard.focus({ preventScroll: true });
   resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -776,7 +1121,7 @@ function renderHistory() {
   if (!historyEntries.length) {
     historyEntriesEl.innerHTML = `
       <tr>
-        <td colspan="9" class="history-empty-row">No validation runs yet. Run a comparison from Dashboard to populate history.</td>
+        <td colspan="9" class="history-empty-row">No validation runs yet. Run a comparison to populate history.</td>
       </tr>
     `;
     return;
@@ -847,13 +1192,18 @@ function updateWorkflowSummary() {
   const meaningfulRfiCount = getMeaningfulRfiCount();
   const readyLabel = `${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'}`;
 
+  if (hasPendingPreloadedEdits()) {
+    workflowSummaryEl.textContent = 'Save or cancel pending edits in preloaded RFI rows before running comparison.';
+    return;
+  }
+
   if (!parsedRecords.length) {
     if (!meaningfulRfiCount) {
       workflowSummaryEl.textContent = 'Import RFI bulk data or enter at least one row in RFI Inputs, then upload a Salesforce export to enable comparison.';
       return;
     }
 
-    workflowSummaryEl.textContent = `${readyLabel} ready. Upload a Salesforce export on Dashboard to enable comparison.`;
+    workflowSummaryEl.textContent = `${readyLabel} ready. Upload a Salesforce export from Compare or Salesforce Records to enable comparison.`;
     return;
   }
 
@@ -875,12 +1225,466 @@ function updateWorkflowSummary() {
   workflowSummaryEl.textContent = `${readyLabel} ready. ${parsedRecords.length} Salesforce records validated and ready to compare.`;
 }
 
-function updateCompareButtonState() {
-  const comparisonReady = parsedRecords.length > 0
+function renderDashboardChartLegend(items) {
+  if (!dashboardChartLegendEl) return;
+
+  dashboardChartLegendEl.innerHTML = items.map((item) => `
+    <div class="dashboard-chart-legend-row">
+      <span class="dashboard-chart-swatch" style="--chart-swatch:${escapeHtml(item.color)}"></span>
+      <div class="dashboard-chart-legend-copy">
+        <strong>${escapeHtml(item.label)}</strong>
+        <span>${escapeHtml(item.detail)}</span>
+      </div>
+      <strong class="dashboard-chart-legend-value">${escapeHtml(item.value)}</strong>
+    </div>
+  `).join('');
+}
+
+function getDashboardFieldLabel(field) {
+  if (field === 'Created Date') return 'RFI Date';
+  if (field === 'Military Service') return 'Military';
+  if (field === 'ASUO Origin URL') return 'Origin URL';
+  return field;
+}
+
+function renderDashboardFieldRecognition() {
+  if (!dashboardFieldBarsEl) return;
+  const isInactive = parsedRecords.length === 0;
+
+  const rows = expectedFields.map((field) => {
+    const isRecognized = !fileDiagnostics.missingFields.includes(field);
+    const fillWidth = isInactive ? 100 : (isRecognized ? 100 : 1);
+    const toneClass = isInactive ? 'inactive' : (isRecognized ? 'recognized' : 'missing');
+    const percent = isInactive ? '0%' : (isRecognized ? '100%' : '0%');
+
+    return `
+      <div class="dashboard-field-row ${toneClass}">
+        <div class="dashboard-field-row-top">
+          <span class="dashboard-field-name">${escapeHtml(getDashboardFieldLabel(field).toUpperCase())}</span>
+          <span class="dashboard-field-percent">${percent}</span>
+        </div>
+        <div class="dashboard-field-meter">
+          <span class="dashboard-field-meter-fill ${toneClass}" style="width:${fillWidth}%"></span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  dashboardFieldBarsEl.innerHTML = rows;
+}
+
+function renderDashboardHealthLegend(items) {
+  if (!dashboardHealthLegendEl) return;
+
+  dashboardHealthLegendEl.innerHTML = items.map((item) => `
+    <span class="dashboard-health-legend-item">
+      <span class="dashboard-health-dot ${escapeHtml(item.tone)}"></span>
+      <span>${escapeHtml(item.label)}</span>
+    </span>
+  `).join('');
+}
+
+function renderDashboardAlerts(alerts) {
+  if (!dashboardAlertsListEl) return;
+
+  if (!alerts.length) {
+    dashboardAlertsListEl.innerHTML = `
+      <div class="dashboard-alert-row neutral">
+        <span class="dashboard-alert-tag">READY</span>
+        <span class="dashboard-alert-message">No issues are currently blocking attention.</span>
+        <span class="dashboard-alert-status">Stable</span>
+      </div>
+    `;
+    return;
+  }
+
+  dashboardAlertsListEl.innerHTML = alerts.map((alert) => `
+    <div class="dashboard-alert-row ${escapeHtml(alert.tone)}">
+      <span class="dashboard-alert-tag">${escapeHtml(alert.tag)}</span>
+      <span class="dashboard-alert-message">${escapeHtml(alert.message)}</span>
+      <span class="dashboard-alert-status">${escapeHtml(alert.status)}</span>
+    </div>
+  `).join('');
+}
+
+function updateDashboardEmptyState() {
+  const { hasRfi, hasExport } = getComparisonSetupState();
+  const isInactive = comparisonResults.length === 0 && !hasRfi && !hasExport;
+
+  if (dashboardPageTitleEl) {
+    dashboardPageTitleEl.textContent = isInactive ? 'Dashboard Overview' : 'Dashboard';
+  }
+  if (dashboardPageSubtitleEl) {
+    dashboardPageSubtitleEl.textContent = isInactive
+      ? 'System idle. Connect a data source to begin analysis.'
+      : 'Comparison health, export readiness, and review attention from the current session.';
+  }
+  if (dashboardEmptyStateEl) {
+    dashboardEmptyStateEl.hidden = !isInactive;
+  }
+  if (dashboardAnalyticsContentEl) {
+    dashboardAnalyticsContentEl.hidden = isInactive;
+  }
+
+  dashboardView?.classList.toggle('dashboard-view-empty', isInactive);
+}
+
+function buildResultsSetupEmptyState() {
+  const {
+    meaningfulRfiCount,
+    hasRfi,
+    hasExport,
+    recognizedFieldCount,
+    missingFieldCount,
+    comparisonReady
+  } = getComparisonSetupState();
+
+  let title = 'No comparison run yet';
+  let message = 'Load both datasets in Compare to generate match results, review exceptions, and download a validation export.';
+  let primaryAction = { action: 'validation', label: 'Open Compare' };
+  let secondaryAction = { action: 'test-data-generator', label: 'Open Data Generator' };
+
+  if (comparisonReady) {
+    title = 'Inputs are ready. Run comparison to generate results';
+    message = `${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'} and ${parsedRecords.length} Salesforce record${parsedRecords.length === 1 ? '' : 's'} are loaded. Return to Compare to run validation and populate this workspace.`;
+    secondaryAction = { action: 'dashboard', label: 'Open Dashboard' };
+  } else if (hasRfi && !hasExport) {
+    title = 'Salesforce export still needs to be uploaded';
+    message = `${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'} ${meaningfulRfiCount === 1 ? 'is' : 'are'} ready. Upload the Salesforce CSV in Compare to unlock matching.`;
+    secondaryAction = { action: 'salesforce-records', label: 'Open Salesforce Records' };
+  } else if (!hasRfi && hasExport) {
+    title = 'RFI input data still needs to be added';
+    message = `${parsedRecords.length} Salesforce record${parsedRecords.length === 1 ? '' : 's'} ${parsedRecords.length === 1 ? 'is' : 'are'} loaded with ${recognizedFieldCount}/${expectedFields.length} expected fields detected. Add RFI rows before running comparison.`;
+    secondaryAction = { action: 'rfi-inputs', label: 'Open RFI Inputs' };
+  }
+
+  const steps = [
+    {
+      done: hasRfi,
+      title: 'RFI inputs',
+      detail: hasRfi
+        ? `${meaningfulRfiCount} row${meaningfulRfiCount === 1 ? '' : 's'} prepared`
+        : 'Import a CSV or enter manual rows'
+    },
+    {
+      done: hasExport,
+      title: 'Salesforce export',
+      detail: hasExport
+        ? `${parsedRecords.length} row${parsedRecords.length === 1 ? '' : 's'} loaded`
+        : 'Upload the latest Salesforce CSV'
+    },
+    {
+      done: false,
+      title: 'Comparison run',
+      detail: comparisonReady
+        ? 'Ready to run from Compare'
+        : `Unlocks after both datasets are ready${hasExport && missingFieldCount ? ` (${missingFieldCount} field${missingFieldCount === 1 ? '' : 's'} still missing)` : ''}`
+    }
+  ];
+
+  return `
+    <div class="results-empty-shell">
+      <div class="results-empty-hero">
+        <div class="results-empty-copy">
+          <p class="section-label">Before Results</p>
+          <h2>${escapeHtml(title)}</h2>
+          <p>${escapeHtml(message)}</p>
+        </div>
+        <div class="results-empty-actions">
+          <button class="primary-button results-empty-action-button" type="button" data-results-empty-action="${escapeHtml(primaryAction.action)}">${escapeHtml(primaryAction.label)}</button>
+          <button class="ghost-button results-empty-action-button" type="button" data-results-empty-action="${escapeHtml(secondaryAction.action)}">${escapeHtml(secondaryAction.label)}</button>
+        </div>
+      </div>
+      <div class="results-empty-step-grid">
+        ${steps.map((step, index) => `
+          <article class="results-empty-step${step.done ? ' is-complete' : ''}">
+            <span class="results-empty-step-badge">${step.done ? '✓' : index + 1}</span>
+            <div class="results-empty-step-copy">
+              <strong>${escapeHtml(step.title)}</strong>
+              <p>${escapeHtml(step.detail)}</p>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function updateDashboardSummary({
+  meaningfulRfiCount,
+  exactMatchCount,
+  partialMatchCount,
+  noMatchCount,
+  totalResults,
+  hasExport,
+  comparisonReady,
+  readinessScore
+}) {
+  const exactRate = totalResults ? Math.round((exactMatchCount / totalResults) * 100) : 0;
+  const processedTotal = totalResults || meaningfulRfiCount;
+  const alerts = [];
+
+  if (dashboardStatSubmissionsEl) {
+    dashboardStatSubmissionsEl.textContent = String(meaningfulRfiCount);
+  }
+  if (dashboardStatSubmissionsCopyEl) {
+    dashboardStatSubmissionsCopyEl.textContent = `${meaningfulRfiCount} RFI row${meaningfulRfiCount === 1 ? '' : 's'} prepared`;
+  }
+  if (dashboardStatSalesforceEl) {
+    dashboardStatSalesforceEl.textContent = String(parsedRecords.length);
+  }
+  if (dashboardStatSalesforceCopyEl) {
+    dashboardStatSalesforceCopyEl.textContent = `${parsedRecords.length} Salesforce row${parsedRecords.length === 1 ? '' : 's'} loaded`;
+  }
+  if (dashboardStatExactEl) {
+    dashboardStatExactEl.textContent = String(exactMatchCount);
+  }
+  if (dashboardStatExactCopyEl) {
+    dashboardStatExactCopyEl.textContent = totalResults ? `${exactRate}% match rate` : 'No comparison run yet';
+  }
+  if (dashboardStatNoMatchEl) {
+    dashboardStatNoMatchEl.textContent = String(noMatchCount);
+  }
+  if (dashboardStatNoMatchCopyEl) {
+    dashboardStatNoMatchCopyEl.textContent = totalResults ? 'No record in export' : 'Awaiting comparison';
+  }
+
+  renderDashboardFieldRecognition();
+
+  const exactPercent = totalResults ? Math.round((exactMatchCount / processedTotal) * 100) : 0;
+  const partialPercent = totalResults ? Math.round((partialMatchCount / processedTotal) * 100) : 0;
+  const noMatchPercent = totalResults ? Math.max(0, 100 - exactPercent - partialPercent) : 0;
+
+  if (dashboardHealthExactSegmentEl) {
+    dashboardHealthExactSegmentEl.style.width = `${exactPercent}%`;
+  }
+  if (dashboardHealthPartialSegmentEl) {
+    dashboardHealthPartialSegmentEl.style.width = `${partialPercent}%`;
+  }
+  if (dashboardHealthNoMatchSegmentEl) {
+    dashboardHealthNoMatchSegmentEl.style.width = `${noMatchPercent}%`;
+  }
+
+  renderDashboardHealthLegend([
+    { tone: 'exact', label: `Exact ${exactPercent}%` },
+    { tone: 'partial', label: `Partial ${partialPercent}%` },
+    { tone: 'none', label: `No match ${noMatchPercent}%` }
+  ]);
+
+  if (dashboardHealthProcessedEl) {
+    dashboardHealthProcessedEl.textContent = totalResults
+      ? `${processedTotal} of ${processedTotal} processed`
+      : `${processedTotal} staged for comparison`;
+  }
+
+  const firstNoMatch = comparisonResults.find((result) => result.status === 'No match');
+  if (firstNoMatch) {
+    alerts.push({
+      tone: 'negative',
+      tag: `RFI-${String(firstNoMatch.submissionNumber).padStart(3, '0')}`,
+      message: 'No record found in Salesforce export',
+      status: 'No match'
+    });
+  }
+
+  if (fileDiagnostics.missingFields.length) {
+    alerts.push({
+      tone: 'warning',
+      tag: 'FIELD',
+      message: `${fileDiagnostics.missingFields.map(getDashboardFieldLabel).join(', ')} not recognized in current export`,
+      status: 'Missing field'
+    });
+  }
+
+  if (!meaningfulRfiCount) {
+    alerts.push({
+      tone: 'warning',
+      tag: 'INPUT',
+      message: 'No RFI submissions are prepared for comparison yet',
+      status: 'Need RFI data'
+    });
+  }
+
+  if (!hasExport) {
+    alerts.push({
+      tone: 'negative',
+      tag: 'EXPORT',
+      message: 'No Salesforce export has been uploaded in this session',
+      status: 'Need export'
+    });
+  }
+
+  renderDashboardAlerts(alerts.slice(0, 3));
+
+  if (dashboardRunFooterEl) {
+    dashboardRunFooterEl.textContent = totalResults
+      ? `Current readiness: ${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'} and ${parsedRecords.length} Salesforce row${parsedRecords.length === 1 ? '' : 's'} loaded`
+      : `Current readiness: ${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'} and ${parsedRecords.length} Salesforce row${parsedRecords.length === 1 ? '' : 's'} loaded`;
+  }
+
+  if (dashboardRunBadgeEl) {
+    const hasWorkingData = meaningfulRfiCount > 0 || parsedRecords.length > 0 || totalResults > 0;
+    dashboardRunBadgeEl.textContent = hasWorkingData ? 'Start New' : 'Awaiting inputs';
+    dashboardRunBadgeEl.disabled = !hasWorkingData;
+  }
+}
+
+function updateDashboardChart() {
+  if (!dashboardChartRingEl || !dashboardChartValueEl || !dashboardChartValueLabelEl) return;
+
+  updateDashboardEmptyState();
+  const dashboardColors = getDashboardStatusColors();
+
+  const meaningfulRfiCount = getMeaningfulRfiCount();
+  const exactMatchCount = comparisonResults.filter((result) => result.status === 'Exact match').length;
+  const partialMatchCount = comparisonResults.filter((result) => result.status === 'Partial match').length;
+  const noMatchCount = comparisonResults.filter((result) => result.status === 'No match').length;
+  const totalResults = comparisonResults.length;
+
+  if (totalResults) {
+    const exactPercent = Math.round((exactMatchCount / totalResults) * 100);
+    const partialPercent = Math.round((partialMatchCount / totalResults) * 100);
+    const noMatchPercent = Math.max(0, 100 - exactPercent - partialPercent);
+    const chartAccentColor = exactPercent > 0
+      ? dashboardColors.exact
+      : partialPercent > 0
+        ? dashboardColors.partial
+        : dashboardColors.noMatch;
+
+    dashboardChartTitleEl.textContent = 'Readiness Overview';
+    dashboardChartValueEl.textContent = `${exactPercent}%`;
+    dashboardChartValueLabelEl.textContent = 'MATCH';
+    dashboardChartValueLabelEl.style.color = dashboardColors.exact;
+    dashboardChartRingEl.style.setProperty('--dashboard-chart-fill', String(exactPercent));
+    dashboardChartRingEl.style.setProperty('--dashboard-chart-color', chartAccentColor);
+    dashboardChartRingEl.style.setProperty('--dashboard-chart-track', dashboardColors.track);
+    renderDashboardChartLegend([
+      { label: 'Exact match', detail: '', value: `${exactPercent}%`, color: dashboardColors.exact },
+      { label: 'Partial match', detail: '', value: `${partialPercent}%`, color: dashboardColors.partial },
+      { label: 'No match', detail: '', value: `${noMatchPercent}%`, color: dashboardColors.noMatch }
+    ]);
+    updateDashboardSummary({
+      meaningfulRfiCount,
+      exactMatchCount,
+      partialMatchCount,
+      noMatchCount,
+      hasExport: parsedRecords.length > 0,
+      comparisonReady: true,
+      totalResults,
+      readinessScore: exactPercent
+    });
+    return;
+  }
+
+  const hasRfi = meaningfulRfiCount > 0;
+  const hasExport = parsedRecords.length > 0;
+  const recognizedRatio = hasExport ? (fileDiagnostics.recognizedFields / expectedFields.length) : 0;
+  const readinessScore = Math.round((((hasRfi ? 0.4 : 0) + (hasExport ? 0.4 : 0) + (0.2 * recognizedRatio)) * 100));
+
+  dashboardChartTitleEl.textContent = 'Readiness Overview';
+  dashboardChartValueEl.textContent = `${readinessScore}%`;
+  dashboardChartValueLabelEl.textContent = 'READY';
+  dashboardChartValueLabelEl.style.color = dashboardColors.setup;
+  dashboardChartRingEl.style.setProperty('--dashboard-chart-fill', String(readinessScore));
+  dashboardChartRingEl.style.setProperty('--dashboard-chart-color', dashboardColors.setup);
+  dashboardChartRingEl.style.setProperty('--dashboard-chart-track', dashboardColors.track);
+  renderDashboardChartLegend([
+    { label: 'RFI inputs', detail: '', value: `${meaningfulRfiCount}`, color: dashboardColors.setup },
+    { label: 'Salesforce export', detail: '', value: `${parsedRecords.length}`, color: dashboardColors.setup },
+    { label: 'Recognized fields', detail: '', value: `${fileDiagnostics.recognizedFields}/${expectedFields.length}`, color: fileDiagnostics.missingFields.length ? dashboardColors.warning : dashboardColors.setup }
+  ]);
+  updateDashboardSummary({
+    meaningfulRfiCount,
+    exactMatchCount,
+    partialMatchCount,
+    noMatchCount,
+    hasExport,
+    comparisonReady: isComparisonReady(),
+    totalResults,
+    readinessScore
+  });
+}
+
+function isComparisonReady() {
+  return parsedRecords.length > 0
     && fileDiagnostics.recognizedFields > 0
     && getMeaningfulRfiCount() > 0;
+}
 
-  compareButton.disabled = !comparisonReady;
+function setValidationProgressStepState(element, isComplete, isActive) {
+  if (!element) return;
+  element.classList.toggle('is-complete', isComplete);
+  element.classList.toggle('is-active', isActive);
+}
+
+function updateValidationProgress() {
+  const meaningfulRfiCount = getMeaningfulRfiCount();
+  const hasRfi = meaningfulRfiCount > 0;
+  const hasExport = parsedRecords.length > 0;
+  const pendingPreloadedEdits = hasPendingPreloadedEdits();
+  const comparisonReady = isComparisonReady() && !pendingPreloadedEdits;
+  const completedSteps = Number(hasRfi) + Number(hasExport) + Number(comparisonReady);
+  const progressPercent = Math.round((completedSteps / 3) * 100);
+
+  if (validationProgressFillEl) {
+    validationProgressFillEl.style.width = `${progressPercent}%`;
+  }
+
+  setValidationProgressStepState(validationStepRfiEl, hasRfi, !hasRfi);
+  setValidationProgressStepState(validationStepSalesforceEl, hasExport, hasRfi && !hasExport);
+  setValidationProgressStepState(validationStepCompareEl, comparisonReady, hasRfi && hasExport && !comparisonReady);
+
+  if (validationStepRfiTitleEl) {
+    validationStepRfiTitleEl.textContent = hasRfi ? 'RFI data ready' : 'Add RFI data';
+  }
+
+  if (validationStepSalesforceTitleEl) {
+    validationStepSalesforceTitleEl.textContent = hasExport ? 'Salesforce export loaded' : 'Upload Salesforce export';
+  }
+
+  if (validationStepCompareTitleEl) {
+    validationStepCompareTitleEl.textContent = comparisonReady ? 'Ready for comparison' : 'Run comparison';
+  }
+
+  if (validationStepRfiDetailEl) {
+    validationStepRfiDetailEl.textContent = hasRfi
+      ? `${meaningfulRfiCount} RFI submission${meaningfulRfiCount === 1 ? '' : 's'} ready.`
+      : 'Upload or enter at least one RFI row.';
+  }
+
+  if (validationStepSalesforceDetailEl) {
+    validationStepSalesforceDetailEl.textContent = !hasExport
+      ? 'Upload the current Salesforce CSV export.'
+      : fileDiagnostics.recognizedFields === 0
+        ? `${parsedRecords.length} row${parsedRecords.length === 1 ? '' : 's'} uploaded, but field mapping needs review.`
+        : fileDiagnostics.missingFields.length
+          ? `${parsedRecords.length} row${parsedRecords.length === 1 ? '' : 's'} uploaded with ${fileDiagnostics.missingFields.length} missing field(s).`
+          : `${parsedRecords.length} row${parsedRecords.length === 1 ? '' : 's'} uploaded and mapped.`;
+  }
+
+  if (validationStepCompareDetailEl) {
+    validationStepCompareDetailEl.textContent = comparisonReady
+      ? 'Everything is ready. Run comparison now.'
+      : pendingPreloadedEdits
+        ? 'Save or cancel pending edits on preloaded RFI rows before comparison can run.'
+      : !hasRfi && !hasExport
+        ? 'Comparison unlocks after both datasets are prepared.'
+        : !hasRfi
+          ? 'Waiting for RFI data before comparison can run.'
+          : !hasExport
+            ? 'Waiting for Salesforce export before comparison can run.'
+            : fileDiagnostics.recognizedFields === 0
+              ? 'Expected export fields must be recognized before comparison can run.'
+              : 'Comparison is available with the current uploaded data.';
+  }
+}
+
+function updateCompareButtonState() {
+  const comparisonReady = isComparisonReady();
+  const pendingPreloadedEdits = hasPendingPreloadedEdits();
+
+  compareButton.disabled = !comparisonReady || pendingPreloadedEdits;
+  updateValidationProgress();
 }
 
 function updateExportPreview({ fileName, fileType, status } = {}) {
@@ -903,6 +1707,15 @@ function updateExportPreview({ fileName, fileType, status } = {}) {
     setPreviewValidationState(currentPreviewStatus, 'neutral-badge');
     previewDiagnosticsNoteEl.textContent = 'Upload a Salesforce export to review imported records before comparing.';
     updateWorkflowSummary();
+    updateDashboardChart();
+    return;
+  }
+
+  if (hasPendingPreloadedEdits()) {
+    setPreviewValidationState('Pending RFI save', 'warning-badge');
+    previewDiagnosticsNoteEl.textContent = 'Save or cancel pending edits in preloaded RFI rows before comparing.';
+    updateWorkflowSummary();
+    updateDashboardChart();
     return;
   }
 
@@ -910,6 +1723,7 @@ function updateExportPreview({ fileName, fileType, status } = {}) {
     setPreviewValidationState('Missing fields', 'error-badge');
     previewDiagnosticsNoteEl.textContent = 'No expected Salesforce comparison fields were recognized in the uploaded file.';
     updateWorkflowSummary();
+    updateDashboardChart();
     return;
   }
 
@@ -917,12 +1731,14 @@ function updateExportPreview({ fileName, fileType, status } = {}) {
     setPreviewValidationState('Ready with warnings', 'warning-badge');
     previewDiagnosticsNoteEl.textContent = `Missing expected fields: ${fileDiagnostics.missingFields.join(', ')}.`;
     updateWorkflowSummary();
+    updateDashboardChart();
     return;
   }
 
   setPreviewValidationState(currentPreviewStatus, 'success-badge');
   previewDiagnosticsNoteEl.textContent = `All ${expectedFields.length} expected comparison fields were recognized.`;
   updateWorkflowSummary();
+  updateDashboardChart();
 }
 
 function updateSubmissionControls() {
@@ -937,6 +1753,7 @@ function updateSubmissionControls() {
   });
 
   updateExportPreview();
+  renderResultsRfiWorkspace();
 }
 
 function refreshComparisonStateAfterRfiUpdate(message) {
@@ -980,7 +1797,7 @@ function resetAllWorkingData() {
   updateExportPreview({ status: 'Inactive' });
 }
 
-function createSubmissionCard(values = {}, insertAfterCard = null, { skipLimit = false } = {}) {
+function createSubmissionCard(values = {}, insertAfterCard = null, { skipLimit = false, requiresExplicitSave = false } = {}) {
   if (!skipLimit) {
     validateRfiRowLimit(getCurrentRfiRowCount() + 1);
   }
@@ -990,30 +1807,24 @@ function createSubmissionCard(values = {}, insertAfterCard = null, { skipLimit =
   const fragment = submissionTemplate.content.cloneNode(true);
   const card = fragment.querySelector('.submission-row');
   card.dataset.submissionId = String(submissionCounter);
+  card.dataset.requiresExplicitSave = requiresExplicitSave ? 'true' : 'false';
 
-  expectedFields.forEach((field) => {
-    const input = card.querySelector(`[data-field="${field}"]`);
-    if (!input) return;
-
-    if (field === 'Created Date') {
-      input.value = normalizeCreatedDateInputValue(values[field]);
-      return;
-    }
-
-    if (field === 'Military Service') {
-      input.checked = normalizeMilitaryStatus(values[field]) === 'true';
-      return;
-    }
-
-    input.value = values[field] || '';
-  });
+  const initialValues = applySubmissionValuesToCard(card, values);
+  if (requiresExplicitSave) {
+    setSavedSubmissionValues(card, initialValues);
+  } else {
+    card.dataset.savedValues = '';
+  }
+  setSubmissionDirtyState(card, false);
 
   const removeButton = card.querySelector('.remove-submission-button');
   const duplicateButton = card.querySelector('.duplicate-submission-button');
+  const saveButton = card.querySelector('.save-submission-button');
+  const cancelButton = card.querySelector('.cancel-submission-button');
 
   duplicateButton.addEventListener('click', () => {
     try {
-      createSubmissionCard(getSubmissionValues(card), card);
+      createSubmissionCard(getCommittedSubmissionValues(card), card);
     } catch (error) {
       statusEl.textContent = error.message;
       return;
@@ -1024,6 +1835,42 @@ function createSubmissionCard(values = {}, insertAfterCard = null, { skipLimit =
       statusEl.textContent = 'Duplicated an RFI submission. Compare again when ready.';
     }
   });
+
+  if (saveButton) {
+    saveButton.addEventListener('click', () => {
+      const committedValues = applySubmissionValuesToCard(card, getSubmissionValues(card));
+      setSavedSubmissionValues(card, committedValues);
+      setSubmissionDirtyState(card, false);
+      updateSubmissionControls();
+
+      const remainingPendingEdits = getPendingPreloadedEditCount();
+      if (remainingPendingEdits) {
+        statusEl.textContent = `Saved this preloaded RFI row. ${remainingPendingEdits} pending edit${remainingPendingEdits === 1 ? '' : 's'} still need to be saved or canceled.`;
+        return;
+      }
+
+      if (parsedRecords.length) {
+        resetResults();
+        statusEl.textContent = 'Saved changes to the preloaded RFI row. Compare again to refresh results.';
+        return;
+      }
+
+      statusEl.textContent = 'Saved changes to the preloaded RFI row.';
+    });
+  }
+
+  if (cancelButton) {
+    cancelButton.addEventListener('click', () => {
+      applySubmissionValuesToCard(card, getSavedSubmissionValues(card));
+      setSubmissionDirtyState(card, false);
+      updateSubmissionControls();
+
+      const remainingPendingEdits = getPendingPreloadedEditCount();
+      statusEl.textContent = remainingPendingEdits
+        ? `Discarded edits for this row. ${remainingPendingEdits} pending preloaded edit${remainingPendingEdits === 1 ? '' : 's'} still need attention.`
+        : 'Discarded unsaved edits for the preloaded RFI row.';
+    });
+  }
 
   removeButton.addEventListener('click', () => {
     if (getSubmissionCards().length === 1) return;
@@ -1046,26 +1893,18 @@ function createSubmissionCard(values = {}, insertAfterCard = null, { skipLimit =
   updateSubmissionControls();
 }
 
-function replaceSingleEmptySubmissionCard(record) {
+function replaceSingleEmptySubmissionCard(record, { requiresExplicitSave = false } = {}) {
   const card = getReplaceableSingleEmptySubmissionCard();
   if (!card) return false;
 
-  expectedFields.forEach((field) => {
-    const input = card.querySelector(`[data-field="${field}"]`);
-    if (!input) return;
-
-    if (field === 'Created Date') {
-      input.value = normalizeCreatedDateInputValue(record[field]);
-      return;
-    }
-
-    if (field === 'Military Service') {
-      input.checked = normalizeMilitaryStatus(record[field]) === 'true';
-      return;
-    }
-
-    input.value = record[field] || '';
-  });
+  card.dataset.requiresExplicitSave = requiresExplicitSave ? 'true' : 'false';
+  const committedValues = applySubmissionValuesToCard(card, record);
+  if (requiresExplicitSave) {
+    setSavedSubmissionValues(card, committedValues);
+  } else {
+    card.dataset.savedValues = '';
+  }
+  setSubmissionDirtyState(card, false);
 
   updateSubmissionControls();
   return true;
@@ -1090,13 +1929,13 @@ function appendImportedRfiRecords(records, sourceLabel) {
   validateRfiRowLimit(nextRowCount);
 
   const [firstRecord, ...remainingRecords] = validRecords;
-  const replacedExistingBlankRow = replaceSingleEmptySubmissionCard(firstRecord);
+  const replacedExistingBlankRow = replaceSingleEmptySubmissionCard(firstRecord, { requiresExplicitSave: true });
 
   if (!replacedExistingBlankRow) {
-    createSubmissionCard(firstRecord);
+    createSubmissionCard(firstRecord, null, { requiresExplicitSave: true });
   }
 
-  remainingRecords.forEach((record) => createSubmissionCard(record));
+  remainingRecords.forEach((record) => createSubmissionCard(record, null, { requiresExplicitSave: true }));
   rfiImportStatusEl.textContent = `Imported ${validRecords.length} RFI row${validRecords.length === 1 ? '' : 's'} from ${sourceLabel}.`;
   refreshComparisonStateAfterRfiUpdate('RFI submissions imported. Compare again when ready.');
 }
@@ -1128,22 +1967,130 @@ function handleRfiCsvFile(file) {
   reader.readAsText(file);
 }
 
+function handleCommittedSubmissionChange(message = 'RFI submissions changed. Compare again to refresh results.') {
+  updateSubmissionControls();
+  if (!comparisonResults.length) return;
+  resetResults();
+  statusEl.textContent = message;
+}
+
+function handlePreloadedSubmissionDraftEdit(card) {
+  const { wasDirty, isDirty } = syncSubmissionDraftState(card);
+  updateSubmissionControls();
+
+  if (!isDirty) {
+    if (wasDirty && !hasPendingPreloadedEdits()) {
+      statusEl.textContent = 'Preloaded RFI row matches the last saved version.';
+    }
+    return;
+  }
+
+  if (comparisonResults.length) {
+    resetResults();
+  }
+  statusEl.textContent = 'Save or cancel edits to preloaded RFI rows before comparing.';
+}
+
 function buildRfiObjects() {
   return getSubmissionCards().map((card, index) => {
     const rfi = { submissionNumber: index + 1 };
+    const committedValues = getCommittedSubmissionValues(card);
 
     expectedFields.forEach((field) => {
-      const input = card.querySelector(`[data-field="${field}"]`);
-      if (!input) {
-        rfi[field] = '';
-        return;
-      }
-
-      rfi[field] = getInputValueForField(field, input);
+      rfi[field] = committedValues[field] || '';
     });
 
     return rfi;
   });
+}
+
+function getFilteredRfiWorkspaceRows() {
+  const query = normalizeValue(resultsRfiSearchQuery);
+  const rows = buildRfiObjects();
+  if (!query) return rows;
+
+  return rows.filter((row) => {
+    const searchableValues = [
+      row.submissionNumber,
+      ...expectedFields.map((field) => displayFieldValue(row, field))
+    ];
+
+    return searchableValues.some((value) => normalizeValue(value).includes(query));
+  });
+}
+
+function renderResultsRfiWorkspace() {
+  if (!resultsRfiContainer) return;
+
+  const rows = buildRfiObjects();
+  const filteredRows = getFilteredRfiWorkspaceRows();
+
+  if (!rows.length) {
+    resultsRfiContainer.innerHTML = `
+      <div class="results-workspace-empty-state">
+        <p class="section-label">RFI Inputs</p>
+        <h3>No RFI rows are available yet</h3>
+        <p>Add rows from Compare or open the full RFI Inputs workspace to import a CSV and prepare submissions.</p>
+        <div class="results-empty-actions">
+          <button class="primary-button results-empty-action-button" type="button" data-results-empty-action="validation">Open Compare</button>
+          <button class="ghost-button results-empty-action-button" type="button" data-results-empty-action="rfi-inputs">Open RFI Inputs</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const header = `
+    <div class="preview-toolbar">
+      <div class="preview-toolbar-copy">
+        <strong>Current RFI inputs</strong>
+        <span>Showing ${filteredRows.length} of ${rows.length} RFI row${rows.length === 1 ? '' : 's'}</span>
+      </div>
+      <label class="preview-search-field" for="results-rfi-search-input">
+        <span class="preview-search-label">Search RFI rows</span>
+        <input
+          type="search"
+          id="results-rfi-search-input"
+          class="preview-search-input results-rfi-search-input"
+          placeholder="Search RFI values"
+          value="${escapeHtml(resultsRfiSearchQuery)}"
+        />
+      </label>
+    </div>
+  `;
+
+  const columns = ['RFI #', 'Created Date', 'First Name', 'Last Name', 'Email', 'Phone Number', 'Military Service', 'ASUO Origin URL'];
+  const body = filteredRows.map((row) => `
+    <tr>
+      <td>${escapeHtml(`#${row.submissionNumber}`)}</td>
+      <td>${escapeHtml(displayFieldValue(row, 'Created Date') || '-')}</td>
+      <td>${escapeHtml(row['First Name'] || '-')}</td>
+      <td>${escapeHtml(row['Last Name'] || '-')}</td>
+      <td>${escapeHtml(row['Email'] || '-')}</td>
+      <td>${escapeHtml(row['Phone Number'] || '-')}</td>
+      <td>${escapeHtml(displayFieldValue(row, 'Military Service') || '-')}</td>
+      <td>${escapeHtml(row['ASUO Origin URL'] || '-')}</td>
+    </tr>
+  `).join('');
+
+  const emptyState = `
+    <tr>
+      <td colspan="${columns.length}" class="preview-empty-row">No RFI rows match that search.</td>
+    </tr>
+  `;
+
+  resultsRfiContainer.innerHTML = `
+    ${header}
+    <div class="table-shell">
+      <table class="results-rfi-table">
+        <thead>
+          <tr>${columns.map((column) => `<th>${escapeHtml(column)}</th>`).join('')}</tr>
+        </thead>
+        <tbody>${body || emptyState}</tbody>
+      </table>
+    </div>
+    <p>This table mirrors the current RFI values used for comparison.</p>
+  `;
 }
 
 function renderPreviewEmptyState(container, message = 'Import a Salesforce file above to view the record grid') {
@@ -1209,7 +2156,17 @@ function buildPreviewMarkup(records, searchInputId) {
 
 function renderPreview(records) {
   if (!records.length) {
-    previewBodyContainers.forEach((container) => renderPreviewEmptyState(container));
+    if (previewContainer) {
+      renderPreviewEmptyState(previewContainer);
+    }
+
+    if (salesforceRecordsContainer) {
+      renderPreviewEmptyState(salesforceRecordsContainer, 'Upload a Salesforce file to review the imported record grid.');
+    }
+
+    if (resultsSalesforceContainer) {
+      renderPreviewEmptyState(resultsSalesforceContainer, 'Upload a Salesforce file from Compare or Salesforce Records to review the imported record grid.');
+    }
     return;
   }
 
@@ -1219,6 +2176,10 @@ function renderPreview(records) {
 
   if (salesforceRecordsContainer) {
     salesforceRecordsContainer.innerHTML = buildPreviewMarkup(records, 'salesforce-records-search-input');
+  }
+
+  if (resultsSalesforceContainer) {
+    resultsSalesforceContainer.innerHTML = buildPreviewMarkup(records, 'results-salesforce-search-input');
   }
 
   updateExportPreview();
@@ -1308,7 +2269,7 @@ function renderResults(results) {
               value="${escapeHtml(resultsSearchQuery)}"
             />
           </label>
-          <button class="results-filter-button" type="button" aria-label="Filter results">
+          <button class="results-filter-button" type="button" aria-label="Filter results" title="Filter results">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 6h16v2H4V6Zm3 5h10v2H7v-2Zm3 5h4v2h-4v-2Z" fill="currentColor" />
             </svg>
@@ -1319,20 +2280,9 @@ function renderResults(results) {
 
   if (!results.length) {
     resultsContainer.innerHTML = `
-      ${summary}
-      <div class="results-panel-empty">
-        <p>Upload a Salesforce export, import RFI bulk data or prepare manual rows, and run a comparison to review exact matches, partial matches, and gaps.</p>
-      </div>
-      <div class="results-panel-footer">
-        <p>Showing 0 of 0 results</p>
-        <div class="results-pagination">
-          <span class="results-chevron" aria-hidden="true">‹</span>
-          <span class="results-page-chip active">1</span>
-          <span class="results-chevron" aria-hidden="true">›</span>
-        </div>
-      </div>
-    </section>
+      ${buildResultsSetupEmptyState()}
     `;
+    updateDashboardChart();
     return;
   }
 
@@ -1352,6 +2302,7 @@ function renderResults(results) {
       </div>
     </section>
     `;
+    updateDashboardChart();
     return;
   }
 
@@ -1430,6 +2381,7 @@ function renderResults(results) {
     </div>
     </section>
   `;
+  updateDashboardChart();
 }
 
 function downloadCsv(results) {
@@ -1544,7 +2496,9 @@ function handleFileParse(file) {
         return;
       }
 
-      if (getMeaningfulRfiCount()) {
+      if (hasPendingPreloadedEdits()) {
+        statusEl.textContent = `Loaded ${parsedRecords.length} Salesforce record(s). Save or cancel pending edits in preloaded RFI rows before comparing.`;
+      } else if (getMeaningfulRfiCount()) {
         statusEl.textContent = `Loaded ${parsedRecords.length} Salesforce record(s). Ready to compare.`;
       } else {
         statusEl.textContent = `Loaded ${parsedRecords.length} Salesforce record(s). Add at least one RFI submission to enable comparison.`;
@@ -1582,6 +2536,14 @@ previewBodyContainers.forEach((container) => {
     renderPreview(parsedRecords);
   });
 });
+
+if (resultsRfiContainer) {
+  resultsRfiContainer.addEventListener('input', (event) => {
+    if (!event.target.classList.contains('results-rfi-search-input')) return;
+    resultsRfiSearchQuery = event.target.value;
+    renderResultsRfiWorkspace();
+  });
+}
 
 addRfiButton.addEventListener('click', () => {
   try {
@@ -1640,11 +2602,14 @@ if (clearRfiCsvButton && rfiCsvPasteInput) {
   });
 }
 
-submissionsContainer.addEventListener('input', () => {
-  updateExportPreview();
-  if (!comparisonResults.length) return;
-  resetResults();
-  statusEl.textContent = 'RFI submissions changed. Compare again to refresh results.';
+submissionsContainer.addEventListener('input', (event) => {
+  const card = event.target.closest('.submission-row');
+  if (requiresExplicitSubmissionSave(card)) {
+    handlePreloadedSubmissionDraftEdit(card);
+    return;
+  }
+
+  handleCommittedSubmissionChange();
 });
 
 submissionsContainer.addEventListener('focusout', (event) => {
@@ -1655,18 +2620,23 @@ submissionsContainer.addEventListener('focusout', (event) => {
   if (normalizedValue === createdDateInput.value) return;
 
   createdDateInput.value = normalizedValue;
-  updateExportPreview();
+  const card = createdDateInput.closest('.submission-row');
+  if (requiresExplicitSubmissionSave(card)) {
+    handlePreloadedSubmissionDraftEdit(card);
+    return;
+  }
 
-  if (!comparisonResults.length) return;
-  resetResults();
-  statusEl.textContent = 'RFI submissions changed. Compare again to refresh results.';
+  handleCommittedSubmissionChange();
 });
 
-submissionsContainer.addEventListener('change', () => {
-  updateExportPreview();
-  if (!comparisonResults.length) return;
-  resetResults();
-  statusEl.textContent = 'RFI submissions changed. Compare again to refresh results.';
+submissionsContainer.addEventListener('change', (event) => {
+  const card = event.target.closest('.submission-row');
+  if (requiresExplicitSubmissionSave(card)) {
+    handlePreloadedSubmissionDraftEdit(card);
+    return;
+  }
+
+  handleCommittedSubmissionChange();
 });
 
 if (generatorUrlInput) {
@@ -1822,9 +2792,9 @@ if (generatorInjectButton) {
     let injectedCount = 0;
     for (const record of lastGeneratedBatchData) {
       const rfiData = filterGeneratedDataForRfi(record);
-      const replaced = replaceSingleEmptySubmissionCard(rfiData);
+      const replaced = replaceSingleEmptySubmissionCard(rfiData, { requiresExplicitSave: true });
       if (!replaced) {
-        createSubmissionCard(rfiData);
+        createSubmissionCard(rfiData, null, { requiresExplicitSave: true });
       }
       injectedCount++;
     }
@@ -1856,7 +2826,8 @@ compareButton.addEventListener('click', () => {
   recordHistoryRun(comparisonResults, rfis.length);
   downloadButton.disabled = false;
   statusEl.textContent = `Compared ${rfis.length} RFI submission(s) against ${parsedRecords.length} Salesforce record(s). Showing the best unique match per RFI.`;
-  setAppView('dashboard');
+  setResultsWorkspaceTab('results');
+  setAppView('results');
   resultsCard.focus({ preventScroll: true });
   resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
@@ -1877,15 +2848,24 @@ if (resetAllButton) {
 }
 
 if (appearanceButton && appearancePanel) {
-  appearanceButton.addEventListener('click', () => {
-    setAppearancePanelOpen(appearancePanel.hidden);
+  appearanceButton.addEventListener('click', (event) => {
+    const willOpen = appearancePanel.hidden;
+    setAppearancePanelOpen(willOpen);
+
+    if (willOpen && event.detail === 0) {
+      focusAppearanceOption(getActiveAppearanceOption());
+    }
   });
 
   appearanceOptions.forEach((option) => {
-    option.addEventListener('click', () => {
+    option.addEventListener('click', (event) => {
       applyTheme(option.dataset.themeOption);
       setAppearancePanelOpen(false);
+      if (event.detail === 0) {
+        focusElement(appearanceButton);
+      }
     });
+    option.addEventListener('keydown', handleAppearanceOptionKeydown);
   });
 
   document.addEventListener('click', (event) => {
@@ -1895,9 +2875,71 @@ if (appearanceButton && appearancePanel) {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !appearancePanel.hidden) {
       setAppearancePanelOpen(false);
+      if (appearancePanel.contains(document.activeElement)) {
+        focusElement(appearanceButton);
+      }
     }
+  });
+}
+
+sidebarNav?.addEventListener('keydown', handleSidebarNavigationKeydown);
+appearanceButton?.addEventListener('keydown', handleSidebarNavigationKeydown);
+
+if (dashboardUploadRfiButton && rfiCsvInput) {
+  dashboardUploadRfiButton.addEventListener('click', () => {
+    rfiCsvInput.click();
+  });
+}
+
+if (dashboardOpenRfiButton) {
+  dashboardOpenRfiButton.addEventListener('click', () => {
+    setAppView('rfi-inputs');
+  });
+}
+
+if (dashboardUploadSalesforceButton && fileInput) {
+  dashboardUploadSalesforceButton.addEventListener('click', () => {
+    fileInput.click();
+  });
+}
+
+if (dashboardOpenSalesforceButton) {
+  dashboardOpenSalesforceButton.addEventListener('click', () => {
+    setAppView('salesforce-records');
+  });
+}
+
+resultsWorkspaceTabButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setResultsWorkspaceTab(button.dataset.resultsWorkspaceTab);
+  });
+});
+
+if (resultsOpenRfiPageButton) {
+  resultsOpenRfiPageButton.addEventListener('click', () => {
+    setAppView('rfi-inputs');
+  });
+}
+
+if (resultsOpenSalesforcePageButton) {
+  resultsOpenSalesforcePageButton.addEventListener('click', () => {
+    setAppView('salesforce-records');
+  });
+}
+
+if (dashboardEmptyStartButton) {
+  dashboardEmptyStartButton.addEventListener('click', () => {
+    setAppView('validation');
+  });
+}
+
+if (dashboardRunBadgeEl) {
+  dashboardRunBadgeEl.addEventListener('click', () => {
+    if (dashboardRunBadgeEl.disabled) return;
+    resetAllWorkingData();
+    setAppView('validation');
   });
 }
 
@@ -1944,6 +2986,26 @@ resultsContainer.addEventListener('input', (event) => {
   renderResults(comparisonResults);
 });
 
+resultsContainer.addEventListener('click', (event) => {
+  const actionButton = event.target.closest('[data-results-empty-action]');
+  if (!actionButton) return;
+
+  const view = actionButton.dataset.resultsEmptyAction;
+  if (!view) return;
+  setAppView(view);
+});
+
+if (resultsRfiContainer) {
+  resultsRfiContainer.addEventListener('click', (event) => {
+    const actionButton = event.target.closest('[data-results-empty-action]');
+    if (!actionButton) return;
+
+    const view = actionButton.dataset.resultsEmptyAction;
+    if (!view) return;
+    setAppView(view);
+  });
+}
+
 if (notificationsButton && notificationsPanel) {
   notificationsButton.addEventListener('click', () => {
     setNotificationsPanelOpen(notificationsPanel.hidden);
@@ -1987,6 +3049,7 @@ applyTheme(getStoredTheme());
 setAppearancePanelOpen(false);
 renderResults([]);
 renderPreview([]);
+renderResultsRfiWorkspace();
 renderHistory();
 renderNotifications();
 updateExportPreview();
@@ -1998,4 +3061,5 @@ updateGeneratorSelectionStyles();
 updateBatchCountDisplay();
 setNotificationsPanelOpen(false);
 setRfiInputMode('manual');
+setResultsWorkspaceTab('results');
 setAppView('dashboard');
