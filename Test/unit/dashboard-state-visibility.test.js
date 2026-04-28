@@ -20,28 +20,24 @@ test('empty dashboard ring includes a rotating spinner overlay', () => {
   assert.match(stylesCss, /@keyframes\s+dashboard-empty-ring-spin/);
 });
 
-test('field recognition uses success, inactive, and missing status colors', () => {
-  assert.match(stylesCss, /\.dashboard-field-row\.recognized[\s\S]*color:\s*var\(--dashboard-status-exact\);/);
-  assert.match(stylesCss, /\.dashboard-field-row\.inactive[\s\S]*color:\s*var\(--dashboard-status-inactive\);/);
-  assert.match(stylesCss, /\.dashboard-field-row\.missing[\s\S]*color:\s*var\(--dashboard-status-warning\);/);
-  assert.match(stylesCss, /\.dashboard-field-meter-fill\.recognized\s*\{\s*background:\s*var\(--dashboard-status-exact\);/);
+test('field recognition uses success and missing status colors', () => {
+  assert.match(stylesCss, /\.is-recognized \.field-tile-status-label\s*\{\s*color:\s*#00d26a;/);
+  assert.match(stylesCss, /\.is-missing \.field-tile-status-label\s*\{\s*color:\s*#ff3b30;/);
 });
 
 test('loaded dashboard chart uses an svg donut ring', () => {
-  assert.match(indexHtml, /class="dashboard-chart-ring-svg"/);
+  assert.match(indexHtml, /class="dashboard-premium-ring-svg"/);
   assert.match(stylesCss, /\.dashboard-chart-ring-progress\s*\{/);
   assert.match(stylesCss, /stroke-dasharray:\s*var\(--dashboard-chart-fill\)\s+100;/);
 });
 
 test('dashboard run action is rendered as a disabled button by default', () => {
-  assert.match(indexHtml, /<button id="dashboard-run-badge" class="dashboard-run-badge" type="button" disabled>Awaiting inputs<\/button>/);
+  assert.match(indexHtml, /<button id="dashboard-run-badge" class="dashboard-action-pill" disabled>Awaiting inputs<\/button>/);
 });
 
-test('dashboard overview groups KPI cards with readiness actions in a compact shell', () => {
-  assert.match(indexHtml, /class="dashboard-loaded-overview-grid"/);
-  assert.match(indexHtml, /class="dashboard-loaded-health-footer dashboard-chart-cta"/);
-  assert.match(stylesCss, /\.dashboard-loaded-overview-grid\s*\{/);
-  assert.match(stylesCss, /\.dashboard-empty-stats\s*\{[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);/);
+test('dashboard overview groups KPI cards with readiness actions in a bento layout', () => {
+  assert.match(indexHtml, /id="dashboard-analytics-content" class="dashboard-bento-layout"/);
+  assert.match(stylesCss, /\.dashboard-bento-layout\s*\{/);
 });
 
 test('workflow progress starts with action-oriented step titles', () => {

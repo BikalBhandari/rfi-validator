@@ -93,7 +93,7 @@ const dashboardChartTitleEl = document.getElementById('dashboard-chart-title');
 const dashboardChartModeEl = document.getElementById('dashboard-chart-mode');
 const dashboardChartRingEl = document.getElementById('dashboard-chart-ring');
 const dashboardChartValueEl = document.getElementById('dashboard-chart-value');
-const dashboardChartValueLabelEl = document.getElementById('dashboard-chart-value-label');
+const dashboardChartLabelEl = document.getElementById('dashboard-chart-label');
 const dashboardChartLegendEl = document.getElementById('dashboard-chart-legend');
 const dashboardChartCaptionEl = document.getElementById('dashboard-chart-caption');
 const dashboardAnalyticsContentEl = document.getElementById('dashboard-analytics-content');
@@ -103,8 +103,11 @@ const dashboardStatSalesforceEl = document.getElementById('dashboard-stat-salesf
 const dashboardStatSalesforceCopyEl = document.getElementById('dashboard-stat-salesforce-copy');
 const dashboardStatExactEl = document.getElementById('dashboard-stat-exact');
 const dashboardStatExactCopyEl = document.getElementById('dashboard-stat-exact-copy');
+const dashboardStatPartialEl = document.getElementById('dashboard-stat-partial');
+const dashboardStatPartialCopyEl = document.getElementById('dashboard-stat-partial-copy');
 const dashboardStatNoMatchEl = document.getElementById('dashboard-stat-no-match');
 const dashboardStatNoMatchCopyEl = document.getElementById('dashboard-stat-no-match-copy');
+const DASHBOARD_LAYOUT_STORAGE_KEY = 'rfi-validator-dashboard-layout';
 const dashboardFieldBarsEl = document.getElementById('dashboard-field-bars');
 const dashboardHealthExactSegmentEl = document.getElementById('dashboard-health-exact-segment');
 const dashboardHealthPartialSegmentEl = document.getElementById('dashboard-health-partial-segment');
@@ -328,6 +331,8 @@ function buildSyntheticPhoneDetails(format) {
     number: `${selectedFormat.code} ${selectedFormat.pattern}`
   };
 }
+
+
 
 function buildSyntheticTestRecord(options = {}) {
   const now = options.date instanceof Date ? options.date : new Date();
@@ -1229,13 +1234,12 @@ function renderDashboardChartLegend(items) {
   if (!dashboardChartLegendEl) return;
 
   dashboardChartLegendEl.innerHTML = items.map((item) => `
-    <div class="dashboard-chart-legend-row">
-      <span class="dashboard-chart-swatch" style="--chart-swatch:${escapeHtml(item.color)}"></span>
-      <div class="dashboard-chart-legend-copy">
-        <strong>${escapeHtml(item.label)}</strong>
-        <span>${escapeHtml(item.detail)}</span>
+    <div class="dashboard-metric-item">
+      <div class="dashboard-metric-label">
+        <span class="dashboard-metric-dot" style="background:${escapeHtml(item.color)}"></span>
+        ${escapeHtml(item.label)}
       </div>
-      <strong class="dashboard-chart-legend-value">${escapeHtml(item.value)}</strong>
+      <div class="dashboard-metric-value">${escapeHtml(item.value)}</div>
     </div>
   `).join('');
 }
@@ -1247,30 +1251,52 @@ function getDashboardFieldLabel(field) {
   return field;
 }
 
+function getFieldIcon(field) {
+  const icons = {
+    'Created Date': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+    'First Name': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+    'Last Name': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+    'Email': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>',
+    'Phone Number': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>',
+    'Military Service': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>',
+    'ASUO Origin URL': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>'
+  };
+  return icons[field] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>';
+}
+
 function renderDashboardFieldRecognition() {
   if (!dashboardFieldBarsEl) return;
   const isInactive = parsedRecords.length === 0;
+  
+  dashboardFieldBarsEl.className = 'dashboard-field-diagnostic-grid';
 
-  const rows = expectedFields.map((field) => {
+  const tiles = expectedFields.map((field) => {
     const isRecognized = !fileDiagnostics.missingFields.includes(field);
-    const fillWidth = isInactive ? 100 : (isRecognized ? 100 : 1);
-    const toneClass = isInactive ? 'inactive' : (isRecognized ? 'recognized' : 'missing');
-    const percent = isInactive ? '0%' : (isRecognized ? '100%' : '0%');
+    const hasRfiData = getMeaningfulRfiCount() > 0;
+    const statusLabel = isInactive ? 'PENDING' : (isRecognized ? 'MAPPED' : 'MISSING');
+    const metaText = isInactive ? 'Awaiting export' : (isRecognized ? 'Found in headers' : 'Not detected');
+    const badgeText = isRecognized ? 'Active' : (isInactive ? 'Staged' : 'Required');
 
     return `
-      <div class="dashboard-field-row ${toneClass}">
-        <div class="dashboard-field-row-top">
-          <span class="dashboard-field-name">${escapeHtml(getDashboardFieldLabel(field).toUpperCase())}</span>
-          <span class="dashboard-field-percent">${percent}</span>
+      <article class="dashboard-field-tile ${isRecognized ? 'is-recognized' : 'is-missing'}" data-field-id="${escapeHtml(field)}">
+        <div class="field-tile-header">
+          <div class="field-tile-icon">
+            ${getFieldIcon(field)}
+          </div>
+          <div class="field-tile-info">
+            <span class="field-tile-name">${escapeHtml(getDashboardFieldLabel(field))}</span>
+            <span class="field-tile-status-label">${statusLabel}</span>
+          </div>
         </div>
-        <div class="dashboard-field-meter">
-          <span class="dashboard-field-meter-fill ${toneClass}" style="width:${fillWidth}%"></span>
+        <div class="field-tile-footer">
+          <span class="field-tile-meta">${metaText}</span>
+          <span class="field-tile-badge">${badgeText}</span>
         </div>
-      </div>
+      </article>
     `;
   }).join('');
 
-  dashboardFieldBarsEl.innerHTML = rows;
+  dashboardFieldBarsEl.innerHTML = tiles;
 }
 
 function renderDashboardHealthLegend(items) {
@@ -1278,7 +1304,7 @@ function renderDashboardHealthLegend(items) {
 
   dashboardHealthLegendEl.innerHTML = items.map((item) => `
     <span class="dashboard-health-legend-item">
-      <span class="dashboard-health-dot ${escapeHtml(item.tone)}"></span>
+      <span class="dashboard-metric-dot bar-${escapeHtml(item.tone)}"></span>
       <span>${escapeHtml(item.label)}</span>
     </span>
   `).join('');
@@ -1311,14 +1337,11 @@ function updateDashboardEmptyState() {
   const { hasRfi, hasExport } = getComparisonSetupState();
   const isInactive = comparisonResults.length === 0 && !hasRfi && !hasExport;
 
-  if (dashboardPageTitleEl) {
-    dashboardPageTitleEl.textContent = isInactive ? 'Dashboard Overview' : 'Dashboard';
+  const pageIntro = document.querySelector('.dashboard-page-intro');
+  if (pageIntro) {
+    pageIntro.hidden = isInactive;
   }
-  if (dashboardPageSubtitleEl) {
-    dashboardPageSubtitleEl.textContent = isInactive
-      ? 'System idle. Connect a data source to begin analysis.'
-      : 'Comparison health, export readiness, and review attention from the current session.';
-  }
+
   if (dashboardEmptyStateEl) {
     dashboardEmptyStateEl.hidden = !isInactive;
   }
@@ -1442,6 +1465,13 @@ function updateDashboardSummary({
   if (dashboardStatExactCopyEl) {
     dashboardStatExactCopyEl.textContent = totalResults ? `${exactRate}% match rate` : 'No comparison run yet';
   }
+  if (dashboardStatPartialEl) {
+    dashboardStatPartialEl.textContent = String(partialMatchCount);
+  }
+  if (dashboardStatPartialCopyEl) {
+    const partialRate = totalResults ? Math.round((partialMatchCount / totalResults) * 100) : 0;
+    dashboardStatPartialCopyEl.textContent = totalResults ? `${partialRate}% partial rate` : 'Awaiting comparison';
+  }
   if (dashboardStatNoMatchEl) {
     dashboardStatNoMatchEl.textContent = String(noMatchCount);
   }
@@ -1451,8 +1481,8 @@ function updateDashboardSummary({
 
   renderDashboardFieldRecognition();
 
-  const exactPercent = totalResults ? Math.round((exactMatchCount / processedTotal) * 100) : 0;
-  const partialPercent = totalResults ? Math.round((partialMatchCount / processedTotal) * 100) : 0;
+  const exactPercent = totalResults ? Math.round((exactMatchCount / totalResults) * 100) : 0;
+  const partialPercent = totalResults ? Math.round((partialMatchCount / totalResults) * 100) : 0;
   const noMatchPercent = totalResults ? Math.max(0, 100 - exactPercent - partialPercent) : 0;
 
   if (dashboardHealthExactSegmentEl) {
@@ -1465,11 +1495,7 @@ function updateDashboardSummary({
     dashboardHealthNoMatchSegmentEl.style.width = `${noMatchPercent}%`;
   }
 
-  renderDashboardHealthLegend([
-    { tone: 'exact', label: `Exact ${exactPercent}%` },
-    { tone: 'partial', label: `Partial ${partialPercent}%` },
-    { tone: 'none', label: `No match ${noMatchPercent}%` }
-  ]);
+
 
   if (dashboardHealthProcessedEl) {
     dashboardHealthProcessedEl.textContent = totalResults
@@ -1530,7 +1556,7 @@ function updateDashboardSummary({
 }
 
 function updateDashboardChart() {
-  if (!dashboardChartRingEl || !dashboardChartValueEl || !dashboardChartValueLabelEl) return;
+  if (!dashboardChartRingEl || !dashboardChartValueEl || !dashboardChartLabelEl) return;
 
   updateDashboardEmptyState();
   const dashboardColors = getDashboardStatusColors();
@@ -1541,28 +1567,29 @@ function updateDashboardChart() {
   const noMatchCount = comparisonResults.filter((result) => result.status === 'No match').length;
   const totalResults = comparisonResults.length;
 
+  const ringProgressEl = dashboardChartRingEl.querySelector('.dashboard-premium-ring-progress');
+  
   if (totalResults) {
     const exactPercent = Math.round((exactMatchCount / totalResults) * 100);
     const partialPercent = Math.round((partialMatchCount / totalResults) * 100);
     const noMatchPercent = Math.max(0, 100 - exactPercent - partialPercent);
-    const chartAccentColor = exactPercent > 0
-      ? dashboardColors.exact
-      : partialPercent > 0
-        ? dashboardColors.partial
-        : dashboardColors.noMatch;
 
-    dashboardChartTitleEl.textContent = 'Readiness Overview';
     dashboardChartValueEl.textContent = `${exactPercent}%`;
-    dashboardChartValueLabelEl.textContent = 'MATCH';
-    dashboardChartValueLabelEl.style.color = dashboardColors.exact;
-    dashboardChartRingEl.style.setProperty('--dashboard-chart-fill', String(exactPercent));
-    dashboardChartRingEl.style.setProperty('--dashboard-chart-color', chartAccentColor);
-    dashboardChartRingEl.style.setProperty('--dashboard-chart-track', dashboardColors.track);
+    dashboardChartLabelEl.textContent = 'MATCH';
+    if (dashboardChartModeEl) {
+      dashboardChartModeEl.textContent = 'Comparison Complete';
+    }
+    
+    if (ringProgressEl) {
+      ringProgressEl.style.strokeDashoffset = 100 - exactPercent;
+    }
+
     renderDashboardChartLegend([
-      { label: 'Exact match', detail: '', value: `${exactPercent}%`, color: dashboardColors.exact },
-      { label: 'Partial match', detail: '', value: `${partialPercent}%`, color: dashboardColors.partial },
-      { label: 'No match', detail: '', value: `${noMatchPercent}%`, color: dashboardColors.noMatch }
+      { label: 'Exact match', value: `${exactPercent}%`, color: dashboardColors.exact },
+      { label: 'Partial match', value: `${partialPercent}%`, color: dashboardColors.partial },
+      { label: 'No match', value: `${noMatchPercent}%`, color: dashboardColors.noMatch }
     ]);
+    
     updateDashboardSummary({
       meaningfulRfiCount,
       exactMatchCount,
@@ -1581,18 +1608,22 @@ function updateDashboardChart() {
   const recognizedRatio = hasExport ? (fileDiagnostics.recognizedFields / expectedFields.length) : 0;
   const readinessScore = Math.round((((hasRfi ? 0.4 : 0) + (hasExport ? 0.4 : 0) + (0.2 * recognizedRatio)) * 100));
 
-  dashboardChartTitleEl.textContent = 'Readiness Overview';
   dashboardChartValueEl.textContent = `${readinessScore}%`;
-  dashboardChartValueLabelEl.textContent = 'READY';
-  dashboardChartValueLabelEl.style.color = dashboardColors.setup;
-  dashboardChartRingEl.style.setProperty('--dashboard-chart-fill', String(readinessScore));
-  dashboardChartRingEl.style.setProperty('--dashboard-chart-color', dashboardColors.setup);
-  dashboardChartRingEl.style.setProperty('--dashboard-chart-track', dashboardColors.track);
+  dashboardChartLabelEl.textContent = 'READY';
+  if (dashboardChartModeEl) {
+    dashboardChartModeEl.textContent = isComparisonReady() ? 'Ready to Compare' : 'Awaiting Inputs';
+  }
+  
+  if (ringProgressEl) {
+    ringProgressEl.style.strokeDashoffset = 100 - readinessScore;
+  }
+
   renderDashboardChartLegend([
-    { label: 'RFI inputs', detail: '', value: `${meaningfulRfiCount}`, color: dashboardColors.setup },
-    { label: 'Salesforce export', detail: '', value: `${parsedRecords.length}`, color: dashboardColors.setup },
-    { label: 'Recognized fields', detail: '', value: `${fileDiagnostics.recognizedFields}/${expectedFields.length}`, color: fileDiagnostics.missingFields.length ? dashboardColors.warning : dashboardColors.setup }
+    { label: 'RFI inputs', value: `${meaningfulRfiCount}`, color: dashboardColors.setup },
+    { label: 'Salesforce export', value: `${parsedRecords.length}`, color: dashboardColors.setup },
+    { label: 'Recognized fields', value: `${fileDiagnostics.recognizedFields}/${expectedFields.length}`, color: fileDiagnostics.missingFields.length ? dashboardColors.warning : dashboardColors.setup }
   ]);
+
   updateDashboardSummary({
     meaningfulRfiCount,
     exactMatchCount,
@@ -3038,6 +3069,110 @@ if (previewPanel) {
   previewPanel.addEventListener('toggle', updatePreviewToggleLabel);
 }
 
+// Dashboard Layout (Drag & Drop)
+function initDashboardDragAndDrop() {
+  if (!dashboardAnalyticsContentEl) return;
+
+  const cards = Array.from(dashboardAnalyticsContentEl.querySelectorAll('.dashboard-card'));
+  
+  cards.forEach(card => {
+    card.addEventListener('dragstart', handleDragStart);
+    card.addEventListener('dragover', handleDragOver);
+    card.addEventListener('dragleave', handleDragLeave);
+    card.addEventListener('drop', handleDrop);
+    card.addEventListener('dragend', handleDragEnd);
+  });
+
+  loadDashboardLayout();
+}
+
+let draggedCard = null;
+
+function handleDragStart(e) {
+  draggedCard = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.cardId);
+  
+  // Use a timeout to hide the card being dragged so the ghost image is still visible
+  setTimeout(() => {
+    this.style.visibility = 'hidden';
+  }, 0);
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  
+  const target = e.target.closest('.dashboard-card');
+  if (target && target !== draggedCard) {
+    const allCards = Array.from(dashboardAnalyticsContentEl.querySelectorAll('.dashboard-card'));
+    const draggedIndex = allCards.indexOf(draggedCard);
+    const targetIndex = allCards.indexOf(target);
+    
+    if (draggedIndex < targetIndex) {
+      target.after(draggedCard);
+    } else {
+      target.before(draggedCard);
+    }
+  }
+}
+
+function handleDragLeave() {
+  // Not strictly needed with the move-on-over logic
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  saveDashboardLayout();
+}
+
+function handleDragEnd() {
+  this.classList.remove('dragging');
+  this.style.visibility = '';
+  const allCards = Array.from(dashboardAnalyticsContentEl.querySelectorAll('.dashboard-card'));
+  allCards.forEach(card => {
+    card.classList.remove('drag-over');
+    card.style.visibility = ''; 
+  });
+  draggedCard = null;
+  saveDashboardLayout();
+}
+
+function saveDashboardLayout() {
+  const cards = Array.from(dashboardAnalyticsContentEl.querySelectorAll('.dashboard-card'));
+  const layout = cards.map(card => card.dataset.cardId);
+  localStorage.setItem(DASHBOARD_LAYOUT_STORAGE_KEY, JSON.stringify(layout));
+}
+
+function loadDashboardLayout() {
+  try {
+    const savedLayout = localStorage.getItem(DASHBOARD_LAYOUT_STORAGE_KEY);
+    if (!savedLayout) return;
+    
+    const layout = JSON.parse(savedLayout);
+    const fragment = document.createDocumentFragment();
+    const cardsMap = new Map();
+    
+    const cards = Array.from(dashboardAnalyticsContentEl.querySelectorAll('.dashboard-card'));
+    cards.forEach(card => cardsMap.set(card.dataset.cardId, card));
+    
+    layout.forEach(id => {
+      if (cardsMap.has(id)) {
+        fragment.appendChild(cardsMap.get(id));
+        cardsMap.delete(id);
+      }
+    });
+    
+    // Append any remaining cards that weren't in the saved layout
+    cardsMap.forEach(card => fragment.appendChild(card));
+    
+    dashboardAnalyticsContentEl.appendChild(fragment);
+  } catch (error) {
+    console.error('Failed to load dashboard layout:', error);
+  }
+}
+
 createSubmissionCard({}, null, { skipLimit: true });
 const storedProfile = getStoredProfile() || getDefaultProfile();
 activeProfile = cloneProfile(storedProfile);
@@ -3059,6 +3194,7 @@ updateGeneratorIdentifierData();
 updateGeneratorEmailPreview();
 updateGeneratorSelectionStyles();
 updateBatchCountDisplay();
+initDashboardDragAndDrop();
 setNotificationsPanelOpen(false);
 setRfiInputMode('manual');
 setResultsWorkspaceTab('results');

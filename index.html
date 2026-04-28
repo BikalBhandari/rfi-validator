@@ -204,177 +204,165 @@
             <p id="dashboard-page-subtitle">Comparison health, export readiness, and review attention from the current session.</p>
           </section>
 
-          <section id="dashboard-empty-state" class="dashboard-empty-layout" hidden aria-label="Dashboard empty state">
-            <div class="dashboard-empty-stats">
-              <article class="dashboard-empty-stat-card">
-                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-blue" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M7 4h7l5 5v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm6 1.5V10h4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 16V11.5m0 0-2 2m2-2 2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <span class="dashboard-empty-stat-title">RFI Submission</span>
-                <strong class="dashboard-empty-stat-value">0</strong>
-                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
-              </article>
-
-              <article class="dashboard-empty-stat-card">
-                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-blue" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M5 7.5C5 6.12 8.13 5 12 5s7 1.12 7 2.5S15.87 10 12 10 5 8.88 5 7.5Zm0 5C5 13.88 8.13 15 12 15s7-1.12 7-2.5M5 12.5V17c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                <span class="dashboard-empty-stat-title">Salesforce Records</span>
-                <strong class="dashboard-empty-stat-value">0</strong>
-                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
-              </article>
-
-              <article class="dashboard-empty-stat-card">
-                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-green" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="m7.5 12.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/>
-                  </svg>
-                </span>
-                <span class="dashboard-empty-stat-title">Exact Match</span>
-                <strong class="dashboard-empty-stat-value">0</strong>
-                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
-              </article>
-
-              <article class="dashboard-empty-stat-card">
-                <span class="dashboard-empty-stat-icon dashboard-empty-stat-icon-red" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M9 9l6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-                    <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/>
-                  </svg>
-                </span>
-                <span class="dashboard-empty-stat-title">No Match</span>
-                <strong class="dashboard-empty-stat-value">0</strong>
-                <span class="dashboard-empty-stat-meta">Awaiting data...</span>
-              </article>
-            </div>
-
-            <aside class="dashboard-empty-overview-card" aria-label="Readiness overview">
-              <h2>Readiness Overview</h2>
+          <section id="dashboard-empty-state" class="dashboard-empty-hero" hidden aria-label="Dashboard empty state">
+            <div class="dashboard-hero-visual">
               <div class="dashboard-empty-ring" aria-hidden="true">
                 <div class="dashboard-empty-ring-center">
                   <span class="dashboard-empty-ring-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M5 18h14M8 15V9m4 6V6m4 9v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24"><path d="M5 18h14M8 15V9m4 6V6m4 9v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </span>
                   <span class="dashboard-empty-ring-label">SYSTEM IDLE</span>
                 </div>
               </div>
-              <p>Upload RFI submissions and a Salesforce export to begin validation, matching, and readiness review.</p>
-              <button id="dashboard-empty-start-button" class="primary-button dashboard-empty-start-button" type="button">Start Analysis</button>
-            </aside>
+            </div>
+            
+            <div class="dashboard-hero-content">
+              <div class="dashboard-hero-header">
+                <span class="hero-status-badge">
+                  <span class="status-dot"></span>
+                  System Idle
+                </span>
+                <h1>Ready to Validate</h1>
+                <p>Connect your data sources to begin the validation workflow. Your dashboard will automatically populate once analysis starts.</p>
+              </div>
+
+              <div class="dashboard-hero-footer">
+                <button id="dashboard-empty-start-button" class="primary-button hero-main-cta">Start Analysis Now &rarr;</button>
+              </div>
+            </div>
           </section>
 
           <section class="dashboard-analytics-shell">
-            <div id="dashboard-analytics-content" class="dashboard-loaded-layout">
-              <div class="dashboard-loaded-overview-grid">
-                <div class="dashboard-stat-grid">
-                  <section class="dashboard-stat-card" aria-label="Submission summary">
-                    <span class="dashboard-stat-label">RFI Submission</span>
-                    <strong id="dashboard-stat-submissions" class="dashboard-stat-value">0</strong>
-                    <p id="dashboard-stat-submissions-copy" class="dashboard-stat-copy">RFI rows prepared</p>
-                  </section>
-
-                  <section class="dashboard-stat-card" aria-label="Salesforce records summary">
-                    <span class="dashboard-stat-label">Salesforce Records</span>
-                    <strong id="dashboard-stat-salesforce" class="dashboard-stat-value">0</strong>
-                    <p id="dashboard-stat-salesforce-copy" class="dashboard-stat-copy">Rows loaded from export</p>
-                  </section>
-
-                  <section class="dashboard-stat-card" aria-label="Exact match summary">
-                    <span class="dashboard-stat-label">Exact Match</span>
-                    <strong id="dashboard-stat-exact" class="dashboard-stat-value dashboard-stat-value-positive">0</strong>
-                    <p id="dashboard-stat-exact-copy" class="dashboard-stat-copy">0% match rate</p>
-                  </section>
-
-                  <section class="dashboard-stat-card" aria-label="No match summary">
-                    <span class="dashboard-stat-label">No Match</span>
-                    <strong id="dashboard-stat-no-match" class="dashboard-stat-value dashboard-stat-value-negative">0</strong>
-                    <p id="dashboard-stat-no-match-copy" class="dashboard-stat-copy">No record in export</p>
-                  </section>
+            <div id="dashboard-analytics-content" class="dashboard-bento-layout">
+              <!-- Main Health Card (Large) -->
+              <section class="dashboard-card dashboard-card-large dashboard-health-main" id="card-health" draggable="true" data-card-id="health" aria-label="Global Readiness Health">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-card-header">
+                  <div class="dashboard-card-title-group">
+                    <h2>Readiness Overview</h2>
+                    <p class="dashboard-card-subtitle">Overall match health across all data points</p>
+                  </div>
+                  <span id="dashboard-chart-mode" class="dashboard-badge-glass">Awaiting Compare</span>
                 </div>
 
-                <section class="dashboard-loaded-card dashboard-chart-panel" aria-label="Readiness overview">
-                  <div class="dashboard-loaded-section-header">
-                    <h2 id="dashboard-chart-title">Readiness Overview</h2>
-                    <span id="dashboard-chart-mode" class="dashboard-chart-mode" hidden>Awaiting compare</span>
-                  </div>
-
-                  <div class="dashboard-loaded-readiness-body">
-                    <div class="dashboard-chart-stage">
-                      <div id="dashboard-chart-ring" class="dashboard-chart-ring" aria-hidden="true">
-                        <svg class="dashboard-chart-ring-svg" viewBox="0 0 100 100" focusable="false">
-                          <circle class="dashboard-chart-ring-track" cx="50" cy="50" r="40" pathLength="100"></circle>
-                          <circle class="dashboard-chart-ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle>
-                        </svg>
-                        <div class="dashboard-chart-ring-center">
-                          <strong id="dashboard-chart-value">0%</strong>
-                          <span id="dashboard-chart-value-label">Ready</span>
-                        </div>
+                <div class="dashboard-health-body">
+                  <div class="dashboard-health-visual">
+                    <div id="dashboard-chart-ring" class="dashboard-premium-ring">
+                      <svg class="dashboard-premium-ring-svg" viewBox="0 0 100 100">
+                        <defs>
+                          <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--rds-secondary)" />
+                            <stop offset="100%" stop-color="var(--rds-secondary)" />
+                          </linearGradient>
+                        </defs>
+                        <circle class="dashboard-premium-ring-track" cx="50" cy="50" r="42" fill="var(--green-soft)" />
+                        <circle class="dashboard-premium-ring-progress" cx="50" cy="50" r="42" pathLength="100" />
+                      </svg>
+                      <div class="dashboard-premium-ring-content">
+                        <strong id="dashboard-chart-value">0%</strong>
+                        <span id="dashboard-chart-label">MATCHED</span>
                       </div>
                     </div>
-                    <div id="dashboard-chart-legend" class="dashboard-chart-legend"></div>
                   </div>
 
-                  <p id="dashboard-chart-caption" class="dashboard-chart-caption" hidden>Upload both datasets to begin comparison setup.</p>
-
-                  <div class="dashboard-loaded-health-footer dashboard-chart-cta">
-                    <div class="dashboard-loaded-health-summary">
-                      <span class="dashboard-loaded-health-icon-cluster" aria-hidden="true">
-                        <span class="dashboard-loaded-health-icon dashboard-loaded-health-icon-blue">
-                          <svg viewBox="0 0 24 24">
-                            <path d="M7 4h7l5 5v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm6 1.5V10h4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 16V11.5m0 0-2 2m2-2 2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>
-                        </span>
-                        <span class="dashboard-loaded-health-icon dashboard-loaded-health-icon-lilac">
-                          <svg viewBox="0 0 24 24">
-                            <path d="M12 5c-3.87 0-7 1.12-7 2.5S8.13 10 12 10s7-1.12 7-2.5S15.87 5 12 5Zm-7 5v3.5C5 14.88 8.13 16 12 16s7-1.12 7-2.5V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M5 13.5V17c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5v-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                          </svg>
-                        </span>
-                      </span>
-                      <p id="dashboard-run-footer" class="dashboard-run-footer">Load source data in Compare to populate this dashboard.</p>
+                  <div class="dashboard-health-details">
+                    <div class="dashboard-health-footer-info">
+                      <p id="dashboard-run-footer">Load source data in Compare to populate this dashboard.</p>
+                      <button id="dashboard-run-badge" class="dashboard-action-pill" disabled>Awaiting inputs</button>
                     </div>
-                    <button id="dashboard-run-badge" class="dashboard-run-badge" type="button" disabled>Awaiting inputs</button>
                   </div>
-                </section>
-              </div>
+                </div>
+              </section>
 
-              <div class="dashboard-loaded-main-grid">
-                <section class="dashboard-loaded-card dashboard-field-panel" aria-label="Field mapping check">
-                  <div class="dashboard-loaded-section-header dashboard-loaded-field-header">
-                    <div>
-                      <h2>Field Mapping Check</h2>
-                      <p class="dashboard-field-helper">Header detection only</p>
-                    </div>
-                    <span class="dashboard-loaded-field-badge">Diagnostic</span>
+              <article class="dashboard-card dashboard-source-item" id="card-source-rfi" draggable="true" data-card-id="source-rfi">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-source-icon source-blue">
+                  <svg viewBox="0 0 24 24"><path d="M7 4h7l5 5v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="dashboard-source-info">
+                  <span class="dashboard-source-label">RFI Submissions</span>
+                  <strong id="dashboard-stat-submissions" class="dashboard-source-value">0</strong>
+                  <p id="dashboard-stat-submissions-copy" class="dashboard-source-subtext">Rows prepared</p>
+                </div>
+              </article>
+
+              <article class="dashboard-card dashboard-source-item" id="card-source-sf" draggable="true" data-card-id="source-sf">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-source-icon source-lilac">
+                  <svg viewBox="0 0 24 24"><path d="M12 5c-3.87 0-7 1.12-7 2.5S8.13 10 12 10s7-1.12 7-2.5S15.87 5 12 5Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 7.5V17c0 1.38 3.13 2.5 7 2.5s7-1.12 7-2.5V7.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                </div>
+                <div class="dashboard-source-info">
+                  <span class="dashboard-source-label">Salesforce Records</span>
+                  <strong id="dashboard-stat-salesforce" class="dashboard-source-value">0</strong>
+                  <p id="dashboard-stat-salesforce-copy" class="dashboard-source-subtext">Rows loaded</p>
+                </div>
+              </article>
+
+              <!-- Exact Match Card -->
+              <article class="dashboard-card dashboard-card-mini dashboard-match-stat-card" id="card-match-exact" draggable="true" data-card-id="match-exact">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-match-stat-header">
+                  <span class="dashboard-match-stat-icon icon-exact">
+                    <svg viewBox="0 0 24 24"><path d="m7.5 12.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/></svg>
+                  </span>
+                  <span class="dashboard-match-stat-label">Exact Match</span>
+                </div>
+                <strong id="dashboard-stat-exact" class="dashboard-match-stat-value">0</strong>
+                <p id="dashboard-stat-exact-copy" class="dashboard-match-stat-meta">Awaiting comparison</p>
+              </article>
+
+              <!-- Partial Match Card -->
+              <article class="dashboard-card dashboard-card-mini dashboard-match-stat-card" id="card-match-partial" draggable="true" data-card-id="match-partial">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-match-stat-header">
+                  <span class="dashboard-match-stat-icon icon-partial">
+                    <svg viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/></svg>
+                  </span>
+                  <span class="dashboard-match-stat-label">Partial Match</span>
+                </div>
+                <strong id="dashboard-stat-partial" class="dashboard-match-stat-value">0</strong>
+                <p id="dashboard-stat-partial-copy" class="dashboard-match-stat-meta">Awaiting comparison</p>
+              </article>
+
+              <!-- No Match Card -->
+              <article class="dashboard-card dashboard-card-mini dashboard-match-stat-card" id="card-match-no" draggable="true" data-card-id="match-no">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-match-stat-header">
+                  <span class="dashboard-match-stat-icon icon-no-match">
+                    <svg viewBox="0 0 24 24"><path d="M9 9l6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.28"/></svg>
+                  </span>
+                  <span class="dashboard-match-stat-label">No Match</span>
+                </div>
+                <strong id="dashboard-stat-no-match" class="dashboard-match-stat-value">0</strong>
+                <p id="dashboard-stat-no-match-copy" class="dashboard-match-stat-meta">Awaiting comparison</p>
+              </article>
+
+              <!-- Field Diagnostic (Full width) -->
+              <section class="dashboard-card dashboard-card-full dashboard-field-card" id="card-fields" draggable="true" data-card-id="fields">
+                <div class="dashboard-card-drag-handle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="dashboard-card-header">
+                  <div class="dashboard-card-title-group">
+                    <h2>Field Mapping</h2>
+                    <p class="dashboard-card-subtitle">Header detection diagnostic</p>
                   </div>
-                  <div id="dashboard-field-bars" class="dashboard-field-bars"></div>
-                </section>
-
-                <section class="dashboard-loaded-card dashboard-health-panel" aria-label="Run health">
-                  <div class="dashboard-loaded-section-header dashboard-loaded-health-header">
-                    <h2>Run Health - Proportional Breakdown</h2>
-                  </div>
-
-                  <div class="dashboard-health-track">
-                    <span id="dashboard-health-exact-segment" class="dashboard-health-segment dashboard-health-segment-exact"></span>
-                    <span id="dashboard-health-partial-segment" class="dashboard-health-segment dashboard-health-segment-partial"></span>
-                    <span id="dashboard-health-no-match-segment" class="dashboard-health-segment dashboard-health-segment-no-match"></span>
-                  </div>
-
-                  <div id="dashboard-health-legend" class="dashboard-health-legend" hidden></div>
-                  <div id="dashboard-alerts-list" class="dashboard-alerts-list" hidden></div>
-                  <strong id="dashboard-health-processed" class="dashboard-health-processed" hidden>0 of 0 processed</strong>
-                </section>
-              </div>
+                  <span class="dashboard-badge-outline">Diagnostic</span>
+                </div>
+                <div id="dashboard-field-bars" class="dashboard-field-visualization"></div>
+              </section>
             </div>
           </section>
         </section>
